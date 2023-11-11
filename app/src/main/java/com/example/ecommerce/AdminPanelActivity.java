@@ -7,9 +7,8 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ecommerce.Category.AddNewCategoryActivity;
-import com.example.ecommerce.Category.ShowCategoryActivity;
-import com.example.ecommerce.Category.CategoryActivity;
 import com.example.ecommerce.Category.DeleteCategoryActivity;
+import com.example.ecommerce.Category.ShowCategoryActivity;
 
 public class AdminPanelActivity extends AppCompatActivity {
 
@@ -20,7 +19,7 @@ public class AdminPanelActivity extends AppCompatActivity {
     }
 
     public void addProducts(View view) {
-        startActivity(new Intent(AdminPanelActivity.this, CategoryActivity.class));
+        startActivity(new Intent(AdminPanelActivity.this, AddNewProductsActivity.class));
     }
 
     public void showCategory(View view) {

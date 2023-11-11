@@ -1,48 +1,53 @@
 package com.example.ecommerce;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.ecommerce.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AddNewProductsActivity extends AppCompatActivity {
 
-    private String categoryName, Description, Price, Pname, saveCurrentDate, saveCurrentTime, productRandomKey;
-    private String downloadImageUrl;
-    private ImageView productImage;
+    private Spinner categorySpinner;
     private EditText productName, productDescription, productPrice;
+    private ImageView productImage;
     private Button addNewProductButton;
     private static final int GALLERYPICK = 1;
-    private Uri ImageUri;
-    private StorageReference ProductImageRef;
-    private DatabaseReference ProductsRef;
+    private Uri imageUri;
+    private StorageReference productImageRef;
+    private DatabaseReference categoriesRef;  // Змінена змінна для посилання на категорії
     private ProgressDialog loadingBar;
 
     @Override
@@ -55,61 +60,54 @@ public class AddNewProductsActivity extends AppCompatActivity {
         productImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OpenGallery();
+                openGallery();
             }
         });
 
         addNewProductButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ValidateProductData();
+                validateProductData();
             }
         });
     }
 
-    private void ValidateProductData() {
-        Description = productDescription.getText().toString();
-        Price = productPrice.getText().toString();
-        Pname = productName.getText().toString();
+    private void validateProductData() {
+        String description = productDescription.getText().toString();
+        String price = productPrice.getText().toString();
+        String productNameText = productName.getText().toString();
+        String selectedCategory = categorySpinner.getSelectedItem().toString();
 
-        if(ImageUri == null){
+        if (imageUri == null) {
             Toast.makeText(this, "Add a product image.", Toast.LENGTH_SHORT).show();
-        }
-        else if(TextUtils.isEmpty(Description)){
+        } else if (TextUtils.isEmpty(description)) {
             Toast.makeText(this, "Add a product description.", Toast.LENGTH_SHORT).show();
-        }
-        else if(TextUtils.isEmpty(Price)){
+        } else if (TextUtils.isEmpty(price)) {
             Toast.makeText(this, "Add the cost of the item.", Toast.LENGTH_SHORT).show();
-        }
-        else if(TextUtils.isEmpty(Pname)){
+        } else if (TextUtils.isEmpty(productNameText)) {
             Toast.makeText(this, "Add the product name.", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            StoreProductInformation();
+        } else {
+            storeProductInformation(description, price, productNameText, selectedCategory);
         }
     }
 
-    private void StoreProductInformation() {
+    private void storeProductInformation(String description, String price, String productName, String category) {
         loadingBar.setTitle("Loading Data");
         loadingBar.setMessage("Please wait...");
         loadingBar.setCanceledOnTouchOutside(false);
         loadingBar.show();
 
         Calendar calendar = Calendar.getInstance();
-
         SimpleDateFormat currentDate = new SimpleDateFormat("ddMMyyyy");
-        saveCurrentDate = currentDate.format(calendar.getTime());
-
+        String saveCurrentDate = currentDate.format(calendar.getTime());
         SimpleDateFormat currentTime = new SimpleDateFormat("HHmmss");
-        saveCurrentTime = currentTime.format(calendar.getTime());
+        String saveCurrentTime = currentTime.format(calendar.getTime());
 
-        String categoryLower = categoryName.toLowerCase();
+        final String productRandomKey = saveCurrentDate + saveCurrentTime;
 
-        productRandomKey = saveCurrentDate + saveCurrentTime;
-
-        final StorageReference filePath = ProductImageRef.child(categoryLower).child(productRandomKey + ".jpg");
-
-        final UploadTask uploadTask = filePath.putFile(ImageUri);
+        // Змінено шлях для збереження продукту в обраній категорії
+        final StorageReference filePath = productImageRef.child(category).child(productRandomKey + ".jpg");
+        final UploadTask uploadTask = filePath.putFile(imageUri);
 
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -129,18 +127,17 @@ public class AddNewProductsActivity extends AppCompatActivity {
                         if (!task.isSuccessful()) {
                             throw task.getException();
                         }
-                        downloadImageUrl = filePath.getDownloadUrl().toString();
                         return filePath.getDownloadUrl();
                     }
                 }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
                         if (task.isSuccessful()) {
-                            downloadImageUrl = task.getResult().toString();
-
+                            String downloadImageUrl = task.getResult().toString();
                             Toast.makeText(AddNewProductsActivity.this, "Photo saved", Toast.LENGTH_SHORT).show();
 
-                            SaveProductInfoToDatabase(categoryLower);
+                            // Змінено шлях для збереження продукту в обраній категорії
+                            saveProductInfoToDatabase(category, productName, description, price, downloadImageUrl, productRandomKey);
                         }
                     }
                 });
@@ -148,29 +145,32 @@ public class AddNewProductsActivity extends AppCompatActivity {
         });
     }
 
+    private void saveProductInfoToDatabase(String category, String productName, String description, String price, String imageUrl, String productRandomKey) {
+        // Отримайте посилання на "categories" в базі даних
+        DatabaseReference categoriesRef = FirebaseDatabase.getInstance().getReference().child("categories");
 
+        // Створіть посилання на конкретну категорію
+        DatabaseReference categoryRef = categoriesRef.child(category);
 
+        // Створіть нове посилання для продукту в середині категорії, використовуючи pname як ключ
+        DatabaseReference productRef = categoryRef.child("Products").child(productName);
 
-    private void SaveProductInfoToDatabase(String category) {
-        HashMap<String, Object> productMap = new HashMap<>();
+        // Створіть об'єкт для збереження в базі даних
+        Map<String, Object> productData = new HashMap<>();
+        productData.put("productID",productRandomKey );
+        productData.put("description", description);
+        productData.put("image", imageUrl);
+        productData.put("price", price);
+        productData.put("pname", productName);
 
-        productMap.put("pid", productRandomKey);
-        productMap.put("date", saveCurrentDate);
-        productMap.put("time", saveCurrentTime);
-        productMap.put("description", Description);
-        productMap.put("image", downloadImageUrl);
-        productMap.put("category", category);
-        productMap.put("price", Price);
-        productMap.put("pname", Pname);
-
-        ProductsRef.child(category).child(productRandomKey).updateChildren(productMap)
+        // Збережіть дані в базі даних
+        productRef.setValue(productData)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             loadingBar.dismiss();
                             Toast.makeText(AddNewProductsActivity.this, "Product added", Toast.LENGTH_SHORT).show();
-
                             Intent loginIntent = new Intent(AddNewProductsActivity.this, AdminPanelActivity.class);
                             startActivity(loginIntent);
                         } else {
@@ -182,36 +182,57 @@ public class AddNewProductsActivity extends AppCompatActivity {
                 });
     }
 
-
-    private void OpenGallery() {
+    private void openGallery() {
         Intent galleryIntent = new Intent();
         galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
         galleryIntent.setType("image/*");
-        startActivityForResult(galleryIntent,GALLERYPICK);
+        startActivityForResult(galleryIntent, GALLERYPICK);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == GALLERYPICK && resultCode == RESULT_OK && data != null){
-            ImageUri = data.getData();
-            productImage.setImageURI(ImageUri);
+        if (requestCode == GALLERYPICK && resultCode == RESULT_OK && data != null) {
+            imageUri = data.getData();
+            productImage.setImageURI(imageUri);
         }
     }
 
     private void init() {
+        productImageRef = FirebaseStorage.getInstance().getReference().child("Product Images");
+        loadingBar = new ProgressDialog(this);
 
-        categoryName = getIntent().getExtras().get("category").toString();
-        productImage = findViewById(R.id.select_product_image);
+        categorySpinner = findViewById(R.id.spinner);
         productName = findViewById(R.id.product_name);
         productDescription = findViewById(R.id.description);
         productPrice = findViewById(R.id.product_price);
+        productImage = findViewById(R.id.select_product_image);
         addNewProductButton = findViewById(R.id.addNewproduct);
-        ProductImageRef = FirebaseStorage.getInstance().getReference().child("Product Images");
-        ProductsRef = FirebaseDatabase.getInstance().getReference().child("Products");
-        loadingBar = new ProgressDialog(this);
 
+        // Отримати посилання на "categories" в базі даних
+        categoriesRef = FirebaseDatabase.getInstance().getReference().child("categories");
+
+        // Отримати список категорій з бази даних і встановити його в Spinner
+        categoriesRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<String> categoriesList = new ArrayList<>();
+                for (DataSnapshot categorySnapshot : dataSnapshot.getChildren()) {
+                    String categoryName = categorySnapshot.getKey();
+                    categoriesList.add(categoryName);
+                }
+
+                // Створити адаптер і встановити його в Spinner
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(AddNewProductsActivity.this, android.R.layout.simple_spinner_item, categoriesList);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                categorySpinner.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Обробник скасування запиту (необов'язково)
+            }
+        });
     }
-
 }

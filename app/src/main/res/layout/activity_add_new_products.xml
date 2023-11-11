@@ -15,19 +15,28 @@
         android:layout_marginTop="20dp"
         android:src="@drawable/cat"
         android:layout_height="250dp"/>
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/select_product_image"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginRight="20dp" />
+
     <EditText
         android:id="@+id/product_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-    android:layout_below="@id/select_product_image"
-        android:hint="Product name"
-        android:background="@drawable/edit_text_field"
-        android:padding="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="20dp"
+        android:layout_below="@+id/spinner"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/edit_text_field"
+        android:hint="Product name"
         android:inputType="textMultiLine"
-        />
+        android:padding="10dp" />
 
     <EditText
         android:id="@+id/description"
@@ -66,4 +75,5 @@
         android:backgroundTint="@color/green"
         android:layout_centerHorizontal="true"
         android:text="Add Product" />
+
 </RelativeLayout>
