@@ -22,9 +22,10 @@
         android:id="@+id/Category"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:onClick="addProducts"
-        android:layout_marginTop="100dp"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="104dp"
         android:backgroundTint="@color/textHeading"
+        android:onClick="addProducts"
         android:text="Add Products"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,35 +34,35 @@
         android:id="@+id/showCategory"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
         android:backgroundTint="@color/green"
         android:onClick="showCategory"
         android:text="Show Category"
         app:layout_constraintTop_toBottomOf="@+id/Category"
-        tools:layout_editor_absoluteX="0dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="108dp" />
 
     <Button
         android:id="@+id/addCategory"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="28dp"
         android:backgroundTint="@color/green"
         android:onClick="addCategory"
         android:text="Add Category"
         app:layout_constraintTop_toBottomOf="@+id/showCategory"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp" />
+        tools:layout_editor_absoluteX="108dp" />
 
     <Button
         android:id="@+id/deleteCategory"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="@color/red"
         android:onClick="deleteCategory"
-        android:text="Delete Category"
+        android:text="Delete Elements"
         app:layout_constraintTop_toBottomOf="@+id/addCategory"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp" />
+        tools:layout_editor_absoluteX="108dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

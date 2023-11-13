@@ -16,7 +16,7 @@
             android:name=".Category.AddNewCategoryActivity"
             android:exported="false" />
         <activity
-            android:name=".Category.DeleteCategoryActivity"
+            android:name=".Category.DeleteElementsActivity"
             android:exported="false" />
         <activity
             android:name=".Category.ShowCategoryActivity"
