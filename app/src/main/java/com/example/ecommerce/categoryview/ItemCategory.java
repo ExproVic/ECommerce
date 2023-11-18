@@ -1,4 +1,4 @@
-package com.example.ecommerce;
+package com.example.ecommerce.categoryview;
 
 public class ItemCategory {
     String name;

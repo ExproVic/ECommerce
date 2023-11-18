@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_marginTop="10dp"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/nameProduct"
+        android:layout_width="match_parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:text="name Product"
+        android:layout_height="20dp"/>
+
+    <TextView
+        android:id="@+id/descritionProduct"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/nameProduct"
+        android:layout_height="80dp"
+        android:text="description"
+        android:textSize="20sp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_toEndOf="@+id/imgProduct" />
+    <TextView
+        android:id="@+id/priceProduct"
+        android:layout_width="60dp"
+        android:layout_below="@+id/descritionProduct"
+        android:layout_height="30dp"
+        android:textSize="15sp"
+        android:text="price"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="5dp"
+        android:layout_toEndOf="@+id/imgProduct" />
+    <TextView
+        android:id="@+id/countProduct"
+        android:layout_width="20dp"
+        android:layout_below="@+id/descritionProduct"
+        android:layout_height="30dp"
+        android:textSize="15sp"
+        android:text="0"
+        android:textAlignment="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="5dp"
+        android:layout_toEndOf="@+id/buttonminus" />
+
+    <ImageView
+        android:id="@+id/imgProduct"
+        android:layout_width="150dp"
+        android:layout_height="140dp"
+        android:layout_below="@+id/nameProduct"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:onClick="onCategoryItemClick"
+        android:layout_marginBottom="5dp" />
+
+    <Button
+        android:id="@+id/buttonminus"
+        android:layout_width="55dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/descritionProduct"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/priceProduct"
+        android:backgroundTint="@color/textHeading"
+        android:text="-"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/buttonplus"
+        android:layout_width="55dp"
+        android:layout_height="50dp"
+        android:textSize="20sp"
+        android:backgroundTint="@color/textHeading"
+        android:layout_below="@+id/descritionProduct"
+        android:layout_toEndOf="@+id/countProduct"
+        android:text="+" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/imgProduct"
+        android:layout_marginTop="10dp"
+        android:background="@color/black"
+        />
+
+
+</RelativeLayout>
