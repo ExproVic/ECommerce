@@ -5,10 +5,62 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".productview.ShowProductActivity">
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:background="@color/textHeading"
+
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioHighprice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:theme="@style/MyRadioButton"
+            android:text="High price"/>
+
+        <RadioButton
+            android:id="@+id/radioLowprice"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/MyRadioButton"
+            android:text="Low price"/>
+
+        <RadioButton
+            android:id="@+id/radioSignAZ"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/MyRadioButton"
+            android:text="Sign A-Z"/>
+
+        <RadioButton
+            android:id="@+id/radioSignZA"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/MyRadioButton"
+            android:text="Sign Z-A"/>
+    </RadioGroup>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="35dp"
         android:id="@+id/recycleviewProduct"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/addtoCard"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/addtocardbutton"
+        android:text="Add to Card" />
+
 
 </RelativeLayout>

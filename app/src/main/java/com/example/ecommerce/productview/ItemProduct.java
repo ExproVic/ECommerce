@@ -1,6 +1,6 @@
 package com.example.ecommerce.productview;
 
-public class ItemProduct {
+public class ItemProduct implements Comparable<ItemProduct> {
     private String pname;
     private String descriptionProduct;
     private String Price; // Змінено назву поля з priceProduct на Price
@@ -55,5 +55,14 @@ public class ItemProduct {
     // Змінено назву методу з setNameProduct на setName
     public void setPname(String nameProduct) {
         this.pname = nameProduct;
+    }
+
+    @Override
+    public int compareTo(ItemProduct other) {
+        // Реалізуйте логіку порівняння для використання в методі sort
+        // Наприклад, для сортування за іменем може бути:
+        // return this.pname.compareToIgnoreCase(other.getPname());
+        // Для сортування за ціною, як ви робите в ItemProductComparators:
+        return Double.compare(Double.parseDouble(this.getPrice()), Double.parseDouble(other.getPrice()));
     }
 }
