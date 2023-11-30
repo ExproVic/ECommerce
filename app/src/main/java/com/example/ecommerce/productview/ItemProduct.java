@@ -1,9 +1,20 @@
 package com.example.ecommerce.productview;
 
+import com.google.firebase.database.PropertyName;
+
 public class ItemProduct implements Comparable<ItemProduct> {
+    @PropertyName("pname")
     private String pname;
+
+    @PropertyName("descriptionProduct")
     private String descriptionProduct;
-    private String Price; // Змінено назву поля з priceProduct на Price
+
+    @PropertyName("Price")
+    private String Price;
+    @PropertyName("count")
+    private int count;
+
+    @PropertyName("imageProduct")
     private String imageProduct;
 
     // Порожній конструктор без аргументів (необхідний для Firebase)
@@ -15,6 +26,13 @@ public class ItemProduct implements Comparable<ItemProduct> {
         this.descriptionProduct = descriptionProduct;
         this.Price = Price;
         this.imageProduct = imageProduct;
+    }
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     // Змінено назву методу з getPriceProduct на getPrice

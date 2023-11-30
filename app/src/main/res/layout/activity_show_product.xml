@@ -53,14 +53,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/addtoCard"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:textColor="@color/white"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/addtocardbutton"
-        android:text="Add to Card" />
 
 
 </RelativeLayout>

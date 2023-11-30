@@ -1,0 +1,41 @@
+[33mcommit 73ffe107404b080b19212eb700352e8c18d25475[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31mEcommerce/main[m[33m)[m
+Author: ExproVic <viktor19970429@gmail.com>
+Date:   Sat Nov 25 12:29:21 2023 +0100
+
+    add filters
+
+[33mcommit 078c948ad3a33eb773364e91e004ca638c28a3a9[m
+Author: ExproVic <viktor19970429@gmail.com>
+Date:   Fri Nov 24 19:16:52 2023 +0100
+
+    preparing
+
+[33mcommit bd9a51b044d4df8eaba5e0ed2dc43642004829e4[m
+Author: ExproVic <viktor19970429@gmail.com>
+Date:   Thu Nov 23 14:13:08 2023 +0100
+
+    show Products
+
+[33mcommit ee3600296834d1d694583fcba5b48089987947e0[m
+Author: ExproVic <viktor19970429@gmail.com>
+Date:   Sat Nov 18 22:29:37 2023 +0100
+
+    show products
+
+[33mcommit 85de6f85eccadd793f9b8f9ede807020b81253bb[m
+Author: ExproVic <viktor19970429@gmail.com>
+Date:   Mon Nov 13 20:10:43 2023 +0100
+
+    add delete categories and products
+
+[33mcommit 4e83ff48b26f6fb3189076fe1f45bb375dddc011[m
+Author: ExproVic <viktor19970429@gmail.com>
+Date:   Sat Nov 11 21:25:24 2023 +0100
+
+    function add product to categories
+
+[33mcommit 7431653f2a1a19803c367a9218132ee975446146[m
+Author: ExproVic <viktor19970429@gmail.com>
+Date:   Thu Nov 9 16:58:05 2023 +0100
+
+    first commit
