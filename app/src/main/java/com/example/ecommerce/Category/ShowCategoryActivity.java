@@ -3,6 +3,7 @@ package com.example.ecommerce.Category;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce.R;
+import com.example.ecommerce.cart.ShowCartActivity;
 import com.example.ecommerce.categoryview.ItemCategory;
 import com.example.ecommerce.categoryview.MyAdapter;
 import com.example.ecommerce.productview.ShowProductActivity;
@@ -32,6 +34,7 @@ public class ShowCategoryActivity extends AppCompatActivity implements CategoryC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_category);
+
 
         recyclerView = findViewById(R.id.recycleview);
         items = new ArrayList<>();
@@ -69,7 +72,6 @@ public class ShowCategoryActivity extends AppCompatActivity implements CategoryC
         recyclerView.setAdapter(adapter);
 
     }
-
     @Override
     public void onCategoryClick(ItemCategory itemCategory) {
         if (itemCategory != null) {
@@ -77,6 +79,10 @@ public class ShowCategoryActivity extends AppCompatActivity implements CategoryC
             // Ваш код для обробки натискання на категорію
             openCategory(itemCategory);
         }
+    }
+    public void onCartButtonClick(View view) {
+        Intent intent = new Intent(this, ShowCartActivity.class);
+        startActivity(intent);
     }
 
     private void openCategory(ItemCategory itemCategory) {

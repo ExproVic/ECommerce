@@ -79,19 +79,20 @@
         android:layout_below="@+id/descritionProduct"
         android:layout_toEndOf="@+id/countProduct"
         android:text="+" />
+
     <Button
         android:id="@+id/addtoCart"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:backgroundTint="@color/green"
         android:layout_below="@+id/imgProduct"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:textAlignment="center"
-        android:layout_marginEnd="12dp"
-
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="@color/green"
         android:text="Add to Cart"
+        android:textAlignment="center"
         android:textColor="@color/white" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="2dp"
