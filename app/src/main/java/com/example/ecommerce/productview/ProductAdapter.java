@@ -53,20 +53,27 @@ public class ProductAdapter extends RecyclerView.Adapter<ViewProductHolder> {
                     DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("cart").child(uid);
 
                     // Перевірка чи існує вже такий ключ
-                    cartRef.child(productID).addListenerForSingleValueEvent(new ValueEventListener() {
+                    cartRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            String productID;
+                            String productID = null;
 
-                            if (dataSnapshot.exists()) {
-                                // Якщо існуючий ключ
-                                productID = dataSnapshot.getKey();
-                            } else {
-                                // Якщо ключ не існує, використовуйте push()
-                                productID = cartRef.push().getKey();
+                            // Вибір або створення ідентифікатора продукту
+                            for (DataSnapshot productSnapshot : dataSnapshot.getChildren()) {
+                                String productName = productSnapshot.child("Pname").getValue(String.class);
+                                if (productName != null && productName.equals(item.getPname())) {
+                                    productID = productName; // Використовуємо ім'я продукту як ідентифікатор
+                                    break;
+                                }
                             }
+
+                            // Запис даних в базу даних
+                            if (productID == null) {
+                                // Якщо продукт не знайдено, використовуємо ім'я продукту як ключ
+                                productID = item.getPname();
+                            }
+
                             if (count > 0) {
-                                // Записати дані в базу даних
                                 DatabaseReference productRef = cartRef.child(productID);
                                 productRef.child("image").setValue(item.getImage());
                                 productRef.child("Pname").setValue(item.getPname());
@@ -77,13 +84,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ViewProductHolder> {
                                 Toast.makeText(context, "Товар додано в кошик", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(context, "Кількість товару повинна бути більше 0", Toast.LENGTH_SHORT).show();
-                            }}
+                            }
+                        }
 
                         @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            Toast.makeText(context, "Помилка доступу до бази даних", Toast.LENGTH_SHORT).show();
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // Обробка помилок бази даних, якщо потрібно
                         }
                     });
+
                 }
             }
         });
