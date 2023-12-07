@@ -5,10 +5,23 @@
     android:orientation="vertical">
 
 
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+    <ImageView
+        android:id="@+id/imgcart"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="509dp"
+        android:layout_marginEnd="16dp"
+        android:clickable="true"
+        android:onClick="onCartButtonClick"
+        android:src="@drawable/shopping_cart" />
 
 
 </RelativeLayout>

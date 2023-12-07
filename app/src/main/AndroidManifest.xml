@@ -13,9 +13,11 @@
         android:theme="@style/Theme.Ecommerce"
         tools:targetApi="31">
         <activity
+            android:name=".cart.ShowCartActivity"
+            android:exported="false" />
+        <activity
             android:name=".productview.ShowProductActivity"
-            android:exported="false"/>
-
+            android:exported="false" />
         <activity
             android:name=".Category.AddNewCategoryActivity"
             android:exported="false" />
@@ -24,9 +26,7 @@
             android:exported="false" />
         <activity
             android:name=".Category.ShowCategoryActivity"
-            android:exported="false"/>
-
-
+            android:exported="false" />
         <activity
             android:name=".AddNewProductsActivity"
             android:exported="false" />

@@ -46,12 +46,24 @@
             android:text="Sign Z-A"/>
     </RadioGroup>
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_marginTop="30dp"
         android:layout_marginBottom="35dp"
         android:id="@+id/recycleviewProduct"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+    <ImageView
+        android:id="@+id/imgcart"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="509dp"
+        android:layout_marginEnd="13dp"
+        android:clickable="true"
+        android:onClick="onCartButtonClick"
+        android:src="@drawable/shopping_cart" />
 
 
 

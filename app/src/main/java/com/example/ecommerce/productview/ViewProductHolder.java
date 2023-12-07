@@ -66,6 +66,7 @@ public class ViewProductHolder extends RecyclerView.ViewHolder {
         });
     }
 
+
     // Додайте цей метод
     public void setOnAddToCartClickListener(OnAddToCartClickListener listener) {
         this.addToCartClickListener = listener;
