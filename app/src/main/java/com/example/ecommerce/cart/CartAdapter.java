@@ -19,12 +19,22 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     private Context context;
     private List<ItemCart> cartItems;
+    private OnRemoveClickListener onRemoveClickListener;
 
     public CartAdapter(Context context, List<ItemCart> cartItems) {
         this.context = context;
         this.cartItems = cartItems;
     }
 
+    public interface OnRemoveClickListener {
+        void onRemoveClick(int position);
+    }
+
+    public void setOnRemoveClickListener(OnRemoveClickListener listener) {
+        this.onRemoveClickListener = listener;
+    }
+
+    @NonNull
     @Override
     public CartViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_cart_view, parent, false);
@@ -33,6 +43,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
+        ItemCart currentItem = cartItems.get(position);
         ItemCart cartItem = cartItems.get(position);
 
         // Встановлюємо дані для кожного елемента корзини
@@ -42,6 +53,19 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
         // Завантаження зображення
         Glide.with(context).load(cartItem.getImageUrl()).into(holder.imgProduct);
+
+        holder.deleteProductButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Отримайте позицію елемента, який слід видалити
+                int adapterPosition = holder.getAdapterPosition();
+
+                // Викликайте інтерфейс, щоб сповістити зовнішній світ про натискання кнопки видалення
+                if (onRemoveClickListener != null) {
+                    onRemoveClickListener.onRemoveClick(adapterPosition);
+                }
+            }
+        });
     }
 
     @Override
@@ -50,8 +74,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     }
 
     static class CartViewHolder extends RecyclerView.ViewHolder {
+
         TextView nameProduct, countProduct, totalPrice;
-        ImageView imgProduct; // Додайте ImageView
+        ImageView imgProduct, deleteProductButton; // Додайте ImageView
 
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -59,6 +84,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             countProduct = itemView.findViewById(R.id.countProduct);
             totalPrice = itemView.findViewById(R.id.totalprice);
             imgProduct = itemView.findViewById(R.id.imgProduct); // Ініціалізуйте ImageView
+            deleteProductButton = itemView.findViewById(R.id.deleteproductfromcart); // Ініціалізуйте ImageView
         }
     }
 }

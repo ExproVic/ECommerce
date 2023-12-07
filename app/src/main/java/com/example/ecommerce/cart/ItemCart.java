@@ -1,22 +1,13 @@
 package com.example.ecommerce.cart;
 
-import com.google.firebase.database.PropertyName;
+import android.view.View;
 
 public class ItemCart {
-    @PropertyName("pname")
     private String itemName;
-
-    @PropertyName("count")
     private int itemCount;
-
-    @PropertyName("price")
     private double itemPrice;
-
-    @PropertyName("image")
+    private View.OnClickListener onRemoveClickListener;
     private String imageUrl;
-
-    @PropertyName("totalAmount")
-    private double itemTotalAmount;
 
     // Конструктор
     public ItemCart(String itemName, int itemCount, double itemPrice, String imageUrl) {
@@ -24,58 +15,48 @@ public class ItemCart {
         this.itemCount = itemCount;
         this.itemPrice = itemPrice;
         this.imageUrl = imageUrl;
+        this.onRemoveClickListener = null;
     }
 
-
     // Геттери та сеттери
-    @PropertyName("pname")
     public String getItemName() {
         return itemName;
     }
 
-    @PropertyName("pname")
+    public View.OnClickListener getOnRemoveClickListener() {
+        return onRemoveClickListener;
+    }
+
+    public void setOnRemoveClickListener(View.OnClickListener onRemoveClickListener) {
+        this.onRemoveClickListener = onRemoveClickListener;
+    }
+
     public void setItemName(String itemName) {
         this.itemName = itemName;
     }
 
-    @PropertyName("count")
     public int getItemCount() {
         return itemCount;
     }
 
-    @PropertyName("count")
     public void setItemCount(int itemCount) {
         this.itemCount = itemCount;
     }
 
-    @PropertyName("price")
     public double getItemPrice() {
         return itemPrice;
     }
 
-    @PropertyName("price")
     public void setItemPrice(double itemPrice) {
         this.itemPrice = itemPrice;
     }
 
-    @PropertyName("image")
     public String getImageUrl() {
         return imageUrl;
     }
 
-    @PropertyName("image")
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    @PropertyName("totalAmount")
-    public double getItemTotalAmount() {
-        return itemTotalAmount;
-    }
-
-    @PropertyName("totalAmount")
-    public void setItemTotalAmount(double itemTotalAmount) {
-        this.itemTotalAmount = itemTotalAmount;
     }
 
     // Геттер для обчислення загальної суми за товар
