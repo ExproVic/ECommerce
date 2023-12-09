@@ -93,7 +93,13 @@ public class ShowCartActivity extends AppCompatActivity {
 
                     Log.d("ShowCartActivity", "Total count of products in cart: " + countProduct);
                     updateTotalItemCount(countProduct);
+
+                    // Викличте метод для оновлення суми
+                    updateTotalAmount();
                 }
+
+
+
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -147,6 +153,21 @@ public class ShowCartActivity extends AppCompatActivity {
             Log.e("ShowCartActivity", "totalItemCountTextView is null");
         }
     }
+    private void updateTotalAmount() {
+        double totalAmount = 0;
+
+        for (ItemCart cartItem : cartItems) {
+            totalAmount += cartItem.getTotalPrice();
+        }
+
+        // Отримайте посилання на ваш TextView
+        TextView totalAmountTextView = findViewById(R.id.topay);
+
+        // Встановіть суму як текст для TextView
+        totalAmountTextView.setText(String.valueOf(totalAmount)+"$");
+    }
+
+
 
 
 }
