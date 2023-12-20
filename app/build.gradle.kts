@@ -33,6 +33,9 @@ android {
 }
 
 dependencies {
+    implementation ("com.google.code.gson:gson:2.8.9")
+    implementation ("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation ("com.stripe:stripe-android:20.35.2")
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

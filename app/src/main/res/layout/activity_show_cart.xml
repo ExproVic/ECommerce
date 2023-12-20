@@ -29,6 +29,7 @@ android:layout_height="match_parent" />
         android:layout_marginBottom="-40dp"
         android:backgroundTint="@color/textHeading"
         android:text="Pay"
+        android:onClick="gotopay"
         android:textColor="@color/white" />
 
     <TextView

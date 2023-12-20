@@ -1,5 +1,6 @@
 package com.example.ecommerce.cart;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce.R;
+import com.example.ecommerce.gopay.GoPayActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,10 +33,10 @@ public class ShowCartActivity extends AppCompatActivity {
     private List<ItemCart> cartItems;
     private DatabaseReference cartRef;
     private TextView emptyCartTextView;
+    private String uid; // додайте це поле
     private TextView totalItemCountTextView; // Додав це поле
 
-    // Видаліть це поле в ShowCartActivity
-// private TextView totalItemCountTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,19 +45,16 @@ public class ShowCartActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recycleviewCart);
         emptyCartTextView = findViewById(R.id.emptyCartMessage);
-        // totalItemCountTextView = findViewById(R.id.totalprice); // Видаліть цей рядок
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         cartItems = new ArrayList<>();
         cartAdapter = new CartAdapter(this, cartItems);
         recyclerView.setAdapter(cartAdapter);
-
+        updateCartView();
         setupCartAdapter();
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
-            String uid = currentUser.getUid();
-
+            uid = currentUser.getUid(); // ініціалізуйте uid тут
             cartRef = FirebaseDatabase.getInstance().getReference("cart").child(uid);
 
             cartRef.addValueEventListener(new ValueEventListener() {
@@ -79,8 +78,10 @@ public class ShowCartActivity extends AppCompatActivity {
                         }
                     }
 
+                    // Оновіть адаптер і всі відповідні елементи UI
                     cartAdapter.notifyDataSetChanged();
 
+                    // Перевірте, чи кошик порожній та оновіть UI відповідно
                     if (cartItems.isEmpty()) {
                         String emptyCartMessage = "Cart is Empty";
                         emptyCartTextView.setText(emptyCartMessage);
@@ -94,9 +95,13 @@ public class ShowCartActivity extends AppCompatActivity {
                     Log.d("ShowCartActivity", "Total count of products in cart: " + countProduct);
                     updateTotalItemCount(countProduct);
 
-                    // Викличте метод для оновлення суми
-                    updateTotalAmount();
+                    // Оновлення загальної суми
+                    updateTotalAmountInDatabase();
+
+                    // Оновлення всієї інформації про корзину
+                    updateCartView();
                 }
+
 
 
 
@@ -109,6 +114,17 @@ public class ShowCartActivity extends AppCompatActivity {
             });
         }
     }
+    private void updateTotalAmountInDatabase() {
+        double totalAmount = 0;
+
+        for (ItemCart cartItem : cartItems) {
+            totalAmount += cartItem.getTotalPrice();
+        }
+
+        DatabaseReference totalAmountRef = FirebaseDatabase.getInstance().getReference().child("cart").child(uid).child("totalAmount");
+        totalAmountRef.setValue(totalAmount);
+    }
+
 
     private void setupCartAdapter() {
         cartAdapter.setOnRemoveClickListener(new CartAdapter.OnRemoveClickListener() {
@@ -123,6 +139,7 @@ public class ShowCartActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d("ShowCartActivity", "Item removed successfully");
                             updateCartView();
+                            updateTotalAmount(); // Оновіть загальну суму після видалення елемента
                         } else {
                             Log.e("ShowCartActivity", "Error removing item: " + task.getException().getMessage());
                         }
@@ -132,11 +149,33 @@ public class ShowCartActivity extends AppCompatActivity {
         });
     }
 
+
+
     private void updateCartView() {
         cartAdapter.notifyDataSetChanged();
         int totalItemCount = calculateTotalItemCount();
         updateTotalItemCount(totalItemCount);
+        updateTotalAmount(); // Додайте цей виклик для оновлення загальної ціни
     }
+    private double calculateTotalAmount() {
+        double totalAmount = 0;
+
+        for (ItemCart cartItem : cartItems) {
+            totalAmount += cartItem.getTotalPrice();
+        }
+
+        return totalAmount;
+    }
+    public void gotopay(View view) {
+        updateTotalItemCount(calculateTotalItemCount());
+        updateTotalAmount();
+        String amount = String.valueOf(calculateTotalAmount());
+
+        Intent intent = new Intent(this, GoPayActivity.class);
+        intent.putExtra("amount",amount);
+        startActivity(intent);
+    }
+
 
     private int calculateTotalItemCount() {
         int totalItemCount = 0;
@@ -164,8 +203,13 @@ public class ShowCartActivity extends AppCompatActivity {
         TextView totalAmountTextView = findViewById(R.id.topay);
 
         // Встановіть суму як текст для TextView
-        totalAmountTextView.setText(String.valueOf(totalAmount)+"$");
+        totalAmountTextView.setText(String.valueOf(totalAmount) + "$");
+
+        // Також, оновіть totalItemCountTextView, якщо ви хочете відображати кількість товарів
+        updateTotalItemCount(calculateTotalItemCount());
     }
+
+
 
 
 
