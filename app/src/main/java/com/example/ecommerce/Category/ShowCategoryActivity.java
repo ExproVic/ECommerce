@@ -41,10 +41,8 @@ public class ShowCategoryActivity extends AppCompatActivity implements CategoryC
         MyAdapter myAdapter = new MyAdapter(getApplicationContext(), items, this);
         recyclerView.setAdapter(myAdapter);
 
-        // Отримайте посилання на базу даних Firebase
         databaseReference = FirebaseDatabase.getInstance().getReference().child("categories");
 
-        // Додайте слухача для отримання даних з Firebase
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -75,8 +73,6 @@ public class ShowCategoryActivity extends AppCompatActivity implements CategoryC
     @Override
     public void onCategoryClick(ItemCategory itemCategory) {
         if (itemCategory != null) {
-            Toast.makeText(this, "Clicked on category: " + itemCategory.getName(), Toast.LENGTH_SHORT).show();
-            // Ваш код для обробки натискання на категорію
             openCategory(itemCategory);
         }
     }
@@ -84,12 +80,9 @@ public class ShowCategoryActivity extends AppCompatActivity implements CategoryC
         Intent intent = new Intent(this, ShowCartActivity.class);
         startActivity(intent);
     }
-
     private void openCategory(ItemCategory itemCategory) {
         Log.d("ShowCategoryActivity", "Opening category: " + itemCategory.getName());
         Toast.makeText(this, "Opening category: " + itemCategory.getName(), Toast.LENGTH_SHORT).show();
-        // Ваш код для переходу до відповідної категорії
-        // Використовуйте дані з itemCategory
         Intent intent = new Intent(ShowCategoryActivity.this, ShowProductActivity.class);
         intent.putExtra("category", itemCategory.getName());
         startActivity(intent);

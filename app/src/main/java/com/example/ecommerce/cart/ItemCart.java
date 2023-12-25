@@ -9,7 +9,7 @@ public class ItemCart {
     private View.OnClickListener onRemoveClickListener;
     private String imageUrl;
 
-    // Конструктор
+
     public ItemCart(String itemName, int itemCount, double itemPrice, String imageUrl) {
         this.itemName = itemName;
         this.itemCount = itemCount;
@@ -18,7 +18,6 @@ public class ItemCart {
         this.onRemoveClickListener = null;
     }
 
-    // Геттери та сеттери
     public String getItemName() {
         return itemName;
     }
@@ -59,7 +58,6 @@ public class ItemCart {
         this.imageUrl = imageUrl;
     }
 
-    // Геттер для обчислення загальної суми за товар
     public double getTotalPrice() {
         return itemCount * itemPrice;
     }

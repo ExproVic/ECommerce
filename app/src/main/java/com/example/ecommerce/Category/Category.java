@@ -5,7 +5,6 @@ public class Category {
     private int imageId;
 
     public Category(String categoryName, String imageUrl) {
-        // Порожній конструктор потрібен для використання Firebase
     }
 
     public Category(String name, int imageId) {

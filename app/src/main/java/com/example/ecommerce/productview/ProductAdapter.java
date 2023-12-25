@@ -35,41 +35,30 @@ public class ProductAdapter extends RecyclerView.Adapter<ViewProductHolder> {
         ViewProductHolder holder = new ViewProductHolder(LayoutInflater.from(context).inflate(R.layout.item_view_product, parent, false), new ViewProductHolder.OnAddToCartClickListener() {
             @Override
             public void onAddToCartClick(int count) {
-                // Опрацювання події додавання товару в кошик
-                Toast.makeText(context, "Товар додано в кошик. Кількість: " + count, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "The product has been added to the cart. Number:" + count, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onAddToCartClick(ItemProduct item, int count) {
-                // Отримайте UID користувача
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 FirebaseUser currentUser = mAuth.getCurrentUser();
                 if (currentUser != null) {
                     String uid = currentUser.getUid();
-
-                    // Отримайте ідентифікатор продукту з об'єкта ItemProduct
                     String productID = item.getPname();
-
                     DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("cart").child(uid);
-
-                    // Перевірка чи існує вже такий ключ
                     cartRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             String productID = null;
 
-                            // Вибір або створення ідентифікатора продукту
                             for (DataSnapshot productSnapshot : dataSnapshot.getChildren()) {
                                 String productName = productSnapshot.child("Pname").getValue(String.class);
                                 if (productName != null && productName.equals(item.getPname())) {
-                                    productID = productName; // Використовуємо ім'я продукту як ідентифікатор
+                                    productID = productName;
                                     break;
                                 }
                             }
-
-                            // Запис даних в базу даних
                             if (productID == null) {
-                                // Якщо продукт не знайдено, використовуємо ім'я продукту як ключ
                                 productID = item.getPname();
                             }
 
@@ -81,15 +70,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ViewProductHolder> {
                                 productRef.child("count").setValue(count);
                                 productRef.child("totalAmount").setValue(count * Double.parseDouble(item.getPrice()));
 
-                                Toast.makeText(context, "Товар додано в кошик", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "The product has been added to the cart", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(context, "Кількість товару повинна бути більше 0", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "The product quantity must be greater than 0", Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-                            // Обробка помилок бази даних, якщо потрібно
                         }
                     });
 
@@ -106,7 +94,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ViewProductHolder> {
         ItemProduct item = items.get(position);
         holder.nameProductView.setText(item.getPname());
         holder.descriptionProductView.setText(item.getDescription());
-        holder.priceProductView.setText(item.getPrice());
+        holder.priceProductView.setText(item.getPrice()+"$");
 
         Glide.with(context).load(item.getImage()).into(holder.imageProductView);
     }

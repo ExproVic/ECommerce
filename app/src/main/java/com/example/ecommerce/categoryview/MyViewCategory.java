@@ -25,10 +25,8 @@ public class MyViewCategory extends RecyclerView.ViewHolder implements View.OnCl
     }
 
     public void bind(final ItemCategory itemCategory) {
-        // Заповніть дані для елементів UI з об'єкта ItemCategory
         nameView.setText(itemCategory.getName());
 
-        // Змініть обробник подій так, щоб передавався об'єкт itemCategory
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,6 +39,5 @@ public class MyViewCategory extends RecyclerView.ViewHolder implements View.OnCl
 
     @Override
     public void onClick(View v) {
-        // Можете залишити цей метод порожнім, оскільки обробка кліку вже визначена в bind()
     }
 }

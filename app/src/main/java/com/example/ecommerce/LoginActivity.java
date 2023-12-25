@@ -56,11 +56,10 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     if (userEmail.equals("admin@gmail.com") && userPassword.equals("admin123")) {
-                        // Вхід на сторінку AdminPanelActivity
                         Intent intent = new Intent(LoginActivity.this, AdminPanelActivity.class);
                         startActivity(intent);
                     } else {
-                        // Якщо email і пароль не рівні "admin@gmail.com" і "admin123"
+                        // login and password "admin@gmail.com"  "admin123"
                         Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(LoginActivity.this, ShowCategoryActivity.class));
                     }

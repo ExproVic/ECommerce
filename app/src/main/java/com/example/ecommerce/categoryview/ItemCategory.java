@@ -2,7 +2,7 @@ package com.example.ecommerce.categoryview;
 
 public class ItemCategory {
     String name;
-    String imageUrl; // Зображення тепер представлене як URL
+    String imageUrl;
 
     public ItemCategory(String name, String imageUrl) {
         this.name = name;

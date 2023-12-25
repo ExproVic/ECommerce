@@ -17,7 +17,6 @@ public class ViewProductHolder extends RecyclerView.ViewHolder {
     TextView nameProductView, descriptionProductView, priceProductView, countProductTextView;
     Button minusButton, plusButton, addToCartButton;
 
-    // Додайте цю змінну
     private OnAddToCartClickListener addToCartClickListener;
 
     public ViewProductHolder(@NonNull View itemView, OnAddToCartClickListener addToCartClickListener) {
@@ -31,7 +30,6 @@ public class ViewProductHolder extends RecyclerView.ViewHolder {
         plusButton = itemView.findViewById(R.id.buttonplus);
         addToCartButton = itemView.findViewById(R.id.addtoCart);
 
-        // Обробник подій для кнопки "Мінус"
         minusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,7 +41,6 @@ public class ViewProductHolder extends RecyclerView.ViewHolder {
             }
         });
 
-        // Обробник подій для кнопки "Плюс"
         plusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,10 +50,8 @@ public class ViewProductHolder extends RecyclerView.ViewHolder {
             }
         });
 
-        // Додайте цю змінну
         this.addToCartClickListener = addToCartClickListener;
 
-        // Обробник подій для кнопки "Додати в кошик"
         addToCartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,21 +60,15 @@ public class ViewProductHolder extends RecyclerView.ViewHolder {
             }
         });
     }
-
-
-    // Додайте цей метод
     public void setOnAddToCartClickListener(OnAddToCartClickListener listener) {
         this.addToCartClickListener = listener;
     }
-
-    // Додайте цей метод для збереження списку товарів у ViewProductHolder
     private List<ItemProduct> items;
 
     public void setItems(List<ItemProduct> items) {
         this.items = items;
     }
 
-    // Інтерфейс для обробки події додавання товару в кошик
     public interface OnAddToCartClickListener {
         void onAddToCartClick(int count);
 

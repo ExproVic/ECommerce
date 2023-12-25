@@ -42,7 +42,7 @@ public class DeleteElementsActivity extends AppCompatActivity {
     private List<String> products;
 
     private DatabaseReference categoriesRef;
-    private DatabaseReference productsRef;  // Вибачте за пропуск
+    private DatabaseReference productsRef;
 
     private ProgressDialog loadingBar;
 
@@ -51,24 +51,16 @@ public class DeleteElementsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete_elements);
 
-        // Ініціалізація всіх змінних
-
         spinnerCategory = findViewById(R.id.spinnerCategory);
         spinnerProducts = findViewById(R.id.spinnerProducts);
         buttonCategory = findViewById(R.id.buttonCategory);
         buttonProducts = findViewById(R.id.buttonProducts);
-
-        // Отримайте посилання на "categories" в базі даних
         categoriesRef = FirebaseDatabase.getInstance().getReference().child("categories");
 
-        // Ініціалізуйте Spinner для категорій
         initCategorySpinner();
-
-        // Ініціалізація списку категорій та продуктів
         categories = new ArrayList<>();
         products = new ArrayList<>();
 
-        // Ініціалізація адаптерів
         categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(categoryAdapter);
@@ -77,7 +69,6 @@ public class DeleteElementsActivity extends AppCompatActivity {
         productAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerProducts.setAdapter(productAdapter);
 
-        // Додавання слухача подій для кнопок
         buttonCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,20 +85,16 @@ public class DeleteElementsActivity extends AppCompatActivity {
     }
 
     private void initCategorySpinner() {
-        // Додаємо слухача подій для отримання списку категорій
         categoriesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // Очистіть попередні дані перед оновленням
                 categories.clear();
 
-                // Ітеруємося по всіх дочірніх вузлах (категоріях)
                 for (DataSnapshot categorySnapshot : dataSnapshot.getChildren()) {
                     String categoryName = categorySnapshot.getKey();
                     categories.add(categoryName);
                 }
 
-                // Оновіть адаптер та покажіть обрану категорію
                 categoryAdapter.notifyDataSetChanged();
                 if (categories.size() > 0) {
                     spinnerCategory.setSelection(0);
@@ -115,21 +102,18 @@ public class DeleteElementsActivity extends AppCompatActivity {
                 spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                        // При кожній зміні вибору категорії оновлюйте список продуктів
                         String selectedCategory = spinnerCategory.getSelectedItem().toString();
                         updateProductList(selectedCategory);
                     }
 
                     @Override
                     public void onNothingSelected(AdapterView<?> parentView) {
-                        // Нічого не робимо, якщо нічого не вибрано
                     }
                 });
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Обробляйте помилки, якщо потрібно
             }
         });
     }
@@ -139,16 +123,11 @@ public class DeleteElementsActivity extends AppCompatActivity {
         selectedCategoryRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // Очистіть попередні дані перед оновленням
                 products.clear();
-
-                // Ітеруємося по всіх дочірніх вузлах (продуктах)
                 for (DataSnapshot productSnapshot : dataSnapshot.getChildren()) {
                     String productName = productSnapshot.getKey();
                     products.add(productName);
                 }
-
-                // Оновіть адаптер та покажіть обраний продукт
                 productAdapter.notifyDataSetChanged();
                 if (products.size() > 0) {
                     spinnerProducts.setSelection(0);
@@ -157,18 +136,15 @@ public class DeleteElementsActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Обробляйте помилки, якщо потрібно
             }
         });
     }
 
     public void deleteCategory() {
-        // Отримайте обрану категорію
         Object selectedCategoryObject = spinnerCategory.getSelectedItem();
 
-        // Перевірка, чи вибрана категорія
         if (selectedCategoryObject == null || TextUtils.isEmpty(selectedCategoryObject.toString())) {
-            Toast.makeText(DeleteElementsActivity.this, "Виберіть категорію для видалення", Toast.LENGTH_SHORT).show();
+            Toast.makeText(DeleteElementsActivity.this, "Select a category to delete", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -176,34 +152,27 @@ public class DeleteElementsActivity extends AppCompatActivity {
 
         // Підтвердження видалення
         new AlertDialog.Builder(DeleteElementsActivity.this)
-                .setTitle("Видалення категорії")
-                .setMessage("Ви впевнені, що хочете видалити категорію \"" + selectedCategory + "\"?")
-                .setPositiveButton("Так", new DialogInterface.OnClickListener() {
+                .setTitle("Delete a category")
+                .setMessage("Are you sure you want to delete the category? \"" + selectedCategory + "\"?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Викликається при позитивному відповіді
                         performCategoryDeletion(selectedCategory);
                     }
                 })
-                .setNegativeButton("Ні", null)
+                .setNegativeButton("No", null)
                 .show();
     }
     private void performCategoryDeletion(final String selectedCategory) {
-        // Отримайте посилання на "categories" в базі даних
         DatabaseReference categoriesRef = FirebaseDatabase.getInstance().getReference().child("categories");
-
-        // Видаліть категорію з бази даних
         categoriesRef.child(selectedCategory).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    // Видаліть категорію зі списку
                     categories.remove(selectedCategory);
-                    // Оновіть адаптер
                     categoryAdapter.notifyDataSetChanged();
-                    Toast.makeText(DeleteElementsActivity.this, "Категорію \"" + selectedCategory + "\" видалено", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DeleteElementsActivity.this, "Category \"" + selectedCategory + "\" deleted", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Обробіть помилку видалення з бази даних
                     Toast.makeText(DeleteElementsActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -211,40 +180,30 @@ public class DeleteElementsActivity extends AppCompatActivity {
     }
 
     public void deleteProduct() {
-        // Отримайте обраний продукт
         Object selectedProductObject = spinnerProducts.getSelectedItem();
 
-        // Перевірка, чи вибрано продукт
         if (selectedProductObject == null) {
-            Toast.makeText(DeleteElementsActivity.this, "Виберіть продукт для видалення", Toast.LENGTH_SHORT).show();
+            Toast.makeText(DeleteElementsActivity.this, "Select the product to remove", Toast.LENGTH_SHORT).show();
             return;
         }
-
         String selectedProduct = selectedProductObject.toString();
 
-        // Отримайте обрану категорію
         String selectedCategory = spinnerCategory.getSelectedItem().toString();
 
-        // Перевірка, чи вибрані продукт та категорія
         if (TextUtils.isEmpty(selectedProduct) || TextUtils.isEmpty(selectedCategory)) {
-            Toast.makeText(DeleteElementsActivity.this, "Виберіть категорію та продукт для видалення", Toast.LENGTH_SHORT).show();
+            Toast.makeText(DeleteElementsActivity.this, "Select the category and product to remove", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Отримайте посилання на "categories" в базі даних
         DatabaseReference categoriesRef = FirebaseDatabase.getInstance().getReference().child("categories");
 
-        // Видаліть продукт з бази даних
         categoriesRef.child(selectedCategory).child("Products").child(selectedProduct).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    // Видаліть продукт зі списку
                     products.remove(selectedProduct);
-                    // Оновіть адаптер
                     productAdapter.notifyDataSetChanged();
                 } else {
-                    // Обробіть помилку видалення з бази даних
                     Toast.makeText(DeleteElementsActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }

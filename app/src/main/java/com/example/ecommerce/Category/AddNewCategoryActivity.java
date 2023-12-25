@@ -31,7 +31,7 @@ public class AddNewCategoryActivity extends AppCompatActivity {
     private EditText categoryEditText;
     private Uri imageUri;
     private Button addCategoryButton;
-    private ImageView categoryImage; // Додайте ImageView для вибору зображення категорії
+    private ImageView categoryImage;
     private static final int GALLERY_PICK = 1;
 
     @Override
@@ -48,64 +48,52 @@ public class AddNewCategoryActivity extends AppCompatActivity {
         categoryImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Запуск діалогового вікна для вибору зображення з галереї
                 Intent galleryIntent = new Intent();
                 galleryIntent.setType("image/*");
                 galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(galleryIntent, "Виберіть зображення категорії"), GALLERY_PICK);
+                startActivityForResult(Intent.createChooser(galleryIntent, "Choose the image for category"), GALLERY_PICK);
             }
         });
-// Отримайте посилання на "categories" в базі даних
         DatabaseReference categoriesRef = mDatabase.child("categories");
-
         addCategoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String categoryName = categoryEditText.getText().toString();
 
                 if (!categoryName.isEmpty()) {
-                    // Здійсніть завантаження зображення категорії тут
                     if (imageUri != null) {
                         StorageReference imageRef = mStorageRef.child(categoryName).child(imageUri.getLastPathSegment());
 
-                        // Здійсніть завантаження зображення
                         UploadTask uploadTask = imageRef.putFile(imageUri);
 
                         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                // Зображення завантажено успішно
-                                // Отримайте URL завантаженого зображення
+
                                 Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                                 while (!urlTask.isSuccessful()) ;
                                 Uri downloadUrl = urlTask.getResult();
 
-                                // Створіть об'єкт для збереження в базі даних
                                 Map<String, Object> categoryData = new HashMap<>();
                                 categoryData.put("name", categoryName);
                                 categoryData.put("imageUrl", downloadUrl.toString());
 
-                                // Збережіть дані в базі даних
                                 categoriesRef.child(categoryName).setValue(categoryData);
 
-                                // Очистити поля та відобразити повідомлення про успішне додавання категорії
                                 categoryEditText.setText("");
-                                Toast.makeText(AddNewCategoryActivity.this, "Категорію додано успішно", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddNewCategoryActivity.this, "Category added successfully", Toast.LENGTH_SHORT).show();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                // Помилка завантаження зображення
-                                Toast.makeText(AddNewCategoryActivity.this, "Помилка завантаження зображення", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddNewCategoryActivity.this, "Error loading image", Toast.LENGTH_SHORT).show();
                             }
                         });
                     } else {
-                        // Повідомлення про помилку, якщо не вибрано зображення
-                        Toast.makeText(AddNewCategoryActivity.this, "Виберіть зображення категорії", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddNewCategoryActivity.this, "Select a category image", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    // Повідомлення про помилку, якщо поле з ім'ям категорії порожнє
-                    Toast.makeText(AddNewCategoryActivity.this, "Поле з ім'ям категорії порожнє", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddNewCategoryActivity.this, "The category name field is empty", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -33,8 +33,8 @@ public class ShowCartActivity extends AppCompatActivity {
     private List<ItemCart> cartItems;
     private DatabaseReference cartRef;
     private TextView emptyCartTextView;
-    private String uid; // додайте це поле
-    private TextView totalItemCountTextView; // Додав це поле
+    private String uid;
+    private TextView totalItemCountTextView;
 
 
 
@@ -54,7 +54,7 @@ public class ShowCartActivity extends AppCompatActivity {
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
-            uid = currentUser.getUid(); // ініціалізуйте uid тут
+            uid = currentUser.getUid();
             cartRef = FirebaseDatabase.getInstance().getReference("cart").child(uid);
 
             cartRef.addValueEventListener(new ValueEventListener() {
@@ -78,10 +78,8 @@ public class ShowCartActivity extends AppCompatActivity {
                         }
                     }
 
-                    // Оновіть адаптер і всі відповідні елементи UI
                     cartAdapter.notifyDataSetChanged();
 
-                    // Перевірте, чи кошик порожній та оновіть UI відповідно
                     if (cartItems.isEmpty()) {
                         String emptyCartMessage = "Cart is Empty";
                         emptyCartTextView.setText(emptyCartMessage);
@@ -95,17 +93,12 @@ public class ShowCartActivity extends AppCompatActivity {
                     Log.d("ShowCartActivity", "Total count of products in cart: " + countProduct);
                     updateTotalItemCount(countProduct);
 
-                    // Оновлення загальної суми
+
                     updateTotalAmountInDatabase();
 
-                    // Оновлення всієї інформації про корзину
+
                     updateCartView();
                 }
-
-
-
-
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                     Log.e("ShowCartActivity", "Error reading data from Firebase: " + databaseError.getMessage());
@@ -120,7 +113,6 @@ public class ShowCartActivity extends AppCompatActivity {
         for (ItemCart cartItem : cartItems) {
             totalAmount += cartItem.getTotalPrice();
         }
-
         DatabaseReference totalAmountRef = FirebaseDatabase.getInstance().getReference().child("cart").child(uid).child("totalAmount");
         totalAmountRef.setValue(totalAmount);
     }
@@ -139,7 +131,7 @@ public class ShowCartActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d("ShowCartActivity", "Item removed successfully");
                             updateCartView();
-                            updateTotalAmount(); // Оновіть загальну суму після видалення елемента
+                            updateTotalAmount();
                         } else {
                             Log.e("ShowCartActivity", "Error removing item: " + task.getException().getMessage());
                         }
@@ -148,14 +140,11 @@ public class ShowCartActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
     private void updateCartView() {
         cartAdapter.notifyDataSetChanged();
         int totalItemCount = calculateTotalItemCount();
         updateTotalItemCount(totalItemCount);
-        updateTotalAmount(); // Додайте цей виклик для оновлення загальної ціни
+        updateTotalAmount();
     }
     private double calculateTotalAmount() {
         double totalAmount = 0;
@@ -175,8 +164,6 @@ public class ShowCartActivity extends AppCompatActivity {
         intent.putExtra("amount",amount);
         startActivity(intent);
     }
-
-
     private int calculateTotalItemCount() {
         int totalItemCount = 0;
         for (ItemCart cartItem : cartItems) {
@@ -199,19 +186,10 @@ public class ShowCartActivity extends AppCompatActivity {
             totalAmount += cartItem.getTotalPrice();
         }
 
-        // Отримайте посилання на ваш TextView
         TextView totalAmountTextView = findViewById(R.id.topay);
 
-        // Встановіть суму як текст для TextView
         totalAmountTextView.setText(String.valueOf(totalAmount) + "$");
 
-        // Також, оновіть totalItemCountTextView, якщо ви хочете відображати кількість товарів
         updateTotalItemCount(calculateTotalItemCount());
     }
-
-
-
-
-
-
 }

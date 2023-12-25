@@ -19,7 +19,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewCategory> {
     private List<ItemCategory> items;
     private CategoryClickListener categoryClickListener;
 
-    // Конструктор для категорій
     public MyAdapter(Context context, List<ItemCategory> items, CategoryClickListener categoryClickListener) {
 
         this.context = context;
@@ -38,16 +37,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewCategory> {
     public void onBindViewHolder(@NonNull MyViewCategory holder, int position) {
         holder.nameView.setText(items.get(position).getName());
 
-        // Отримайте URL зображення з об'єкта ItemCategory
         String imageUrl = items.get(position).getImageUrl();
         holder.bind(items.get(position));
-        // Завантаження та відображення зображення з URL за допомогою Picasso
         Picasso.get()
                 .load(imageUrl)
                 .into(holder.imageView);
     }
-
-
     @Override
     public int getItemCount() {
         return items.size();

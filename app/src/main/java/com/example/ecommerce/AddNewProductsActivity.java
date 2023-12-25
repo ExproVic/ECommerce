@@ -47,7 +47,7 @@ public class AddNewProductsActivity extends AppCompatActivity {
     private static final int GALLERYPICK = 1;
     private Uri imageUri;
     private StorageReference productImageRef;
-    private DatabaseReference categoriesRef;  // Змінена змінна для посилання на категорії
+    private DatabaseReference categoriesRef;
     private ProgressDialog loadingBar;
 
     @Override
@@ -105,7 +105,6 @@ public class AddNewProductsActivity extends AppCompatActivity {
 
         final String productRandomKey = saveCurrentDate + saveCurrentTime;
 
-        // Змінено шлях для збереження продукту в обраній категорії
         final StorageReference filePath = productImageRef.child(category).child(productRandomKey + ".jpg");
         final UploadTask uploadTask = filePath.putFile(imageUri);
 
@@ -135,8 +134,6 @@ public class AddNewProductsActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             String downloadImageUrl = task.getResult().toString();
                             Toast.makeText(AddNewProductsActivity.this, "Photo saved", Toast.LENGTH_SHORT).show();
-
-                            // Змінено шлях для збереження продукту в обраній категорії
                             saveProductInfoToDatabase(category, productName, description, price, downloadImageUrl, productRandomKey);
                         }
                     }
@@ -146,16 +143,12 @@ public class AddNewProductsActivity extends AppCompatActivity {
     }
 
     private void saveProductInfoToDatabase(String category, String productName, String description, String price, String imageUrl, String productRandomKey) {
-        // Отримайте посилання на "categories" в базі даних
         DatabaseReference categoriesRef = FirebaseDatabase.getInstance().getReference().child("categories");
 
-        // Створіть посилання на конкретну категорію
         DatabaseReference categoryRef = categoriesRef.child(category);
 
-        // Створіть нове посилання для продукту в середині категорії, використовуючи pname як ключ
         DatabaseReference productRef = categoryRef.child("Products").child(productName);
 
-        // Створіть об'єкт для збереження в базі даних
         Map<String, Object> productData = new HashMap<>();
         productData.put("productID",productRandomKey );
         productData.put("description", description);
@@ -163,7 +156,6 @@ public class AddNewProductsActivity extends AppCompatActivity {
         productData.put("price", price);
         productData.put("pname", productName);
 
-        // Збережіть дані в базі даних
         productRef.setValue(productData)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -210,10 +202,8 @@ public class AddNewProductsActivity extends AppCompatActivity {
         productImage = findViewById(R.id.select_product_image);
         addNewProductButton = findViewById(R.id.addNewproduct);
 
-        // Отримати посилання на "categories" в базі даних
         categoriesRef = FirebaseDatabase.getInstance().getReference().child("categories");
 
-        // Отримати список категорій з бази даних і встановити його в Spinner
         categoriesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -222,8 +212,6 @@ public class AddNewProductsActivity extends AppCompatActivity {
                     String categoryName = categorySnapshot.getKey();
                     categoriesList.add(categoryName);
                 }
-
-                // Створити адаптер і встановити його в Spinner
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(AddNewProductsActivity.this, android.R.layout.simple_spinner_item, categoriesList);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 categorySpinner.setAdapter(adapter);
@@ -231,7 +219,6 @@ public class AddNewProductsActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Обробник скасування запиту (необов'язково)
             }
         });
     }

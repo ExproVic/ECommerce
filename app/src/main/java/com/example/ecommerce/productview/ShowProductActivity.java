@@ -44,13 +44,11 @@ public class ShowProductActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
 
-        // Отримайте дані з інтенту (від категорії, з якої ви прийшли)
         String categoryName = getIntent().getStringExtra("category");
 
         if (categoryName != null) {
-            loadAndDisplayProducts(categoryName); // Відображення продуктів за замовчуванням
+            loadAndDisplayProducts(categoryName);
 
-            // Додайте кнопки або інші елементи управління для сортування
             Button sortByHighPriceButton = findViewById(R.id.radioHighprice);
             sortByHighPriceButton.setOnClickListener(v -> sortByHighPrice(categoryName));
 
@@ -70,50 +68,38 @@ public class ShowProductActivity extends AppCompatActivity {
             productsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot productsSnapshot) {
-                    items.clear(); // Очистіть поточний список перед завантаженням нових даних
+                    items.clear();
 
                     for (DataSnapshot productSnapshot : productsSnapshot.getChildren()) {
                         ItemProduct itemProduct = productSnapshot.getValue(ItemProduct.class);
                         items.add(itemProduct);
                     }
 
-                    // Оновіть адаптер після отримання нових даних
                     adapter.notifyDataSetChanged();
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    // Обробте помилку читання продуктів з бази даних
                     Log.e(TAG, "Error reading data from Firebase: " + databaseError.getMessage());
                     databaseError.toException().printStackTrace();
                 }
             });
         } else {
-            // Обробте випадок, коли дані про категорію не були передані
             Log.e(TAG, "Category name not provided in the intent");
-            // Тут ви можете відобразити повідомлення користувачеві або взяти інші дії за замовчуванням
         }
     }
     private void onAddToCartButtonClick() {
-        // Отримайте вибраний продукт (наприклад, перший продукт у списку)
         if (!items.isEmpty()) {
-            ItemProduct selectedProduct = items.get(0); // Отримайте перший продукт (можливо, вам слід реалізувати вибір продукта за допомогою діалогового вікна або іншого методу)
-
-            // Код для додавання вибраного продукту до корзини
+            ItemProduct selectedProduct = items.get(0);
             addToCart(selectedProduct);
         }
     }
     private void addToCart(ItemProduct product) {
-        // Отримайте UID поточного користувача
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             String uid = currentUser.getUid();
-
-            // Отримайте посилання на "cart" в базі даних та додайте вибраний продукт
             DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("cart").child(uid);
             cartRef.child(product.getPname()).setValue(product);
-
-            // Після успішного додавання продукту обнуліть лічильник
             countProduct = 0;
             Log.d(TAG, "Product added to cart successfully.");
         }
@@ -128,26 +114,23 @@ public class ShowProductActivity extends AppCompatActivity {
         productsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot productsSnapshot) {
-                items.clear(); // Очистіть поточний список перед завантаженням нових даних
+                items.clear();
 
                 for (DataSnapshot productSnapshot : productsSnapshot.getChildren()) {
                     ItemProduct itemProduct = productSnapshot.getValue(ItemProduct.class);
                     items.add(itemProduct);
                 }
 
-                // Оновіть адаптер після отримання нових даних
                 adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Обробте помилку читання продуктів з бази даних
             }
         });
     }
 
     public void onCartButtonClick(View view) {
-        // Код для переходу до ShowCartActivity
         Intent intent = new Intent(this, ShowCartActivity.class);
         startActivity(intent);
     }

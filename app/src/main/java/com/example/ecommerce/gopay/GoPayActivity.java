@@ -69,7 +69,6 @@ public class GoPayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_go_pay);
         amountString = getIntent().getStringExtra("amount");
 
-        // Створення каналу сповіщень
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                     "channel_id",
@@ -82,11 +81,8 @@ public class GoPayActivity extends AppCompatActivity {
 
         startCheckout();
     }
-
-
     private void displayNotification(@NonNull String title, @Nullable String message) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channel_id")
-                .setSmallIcon(R.drawable.suit) // Customize with your notification icon
                 .setContentTitle(title)
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
@@ -111,10 +107,6 @@ public class GoPayActivity extends AppCompatActivity {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
-
-
-
-
     private void startCheckout() {
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         double amount = Double.parseDouble(amountString)*100;
@@ -244,10 +236,6 @@ public class GoPayActivity extends AppCompatActivity {
                 Log.d("PaymentResultCallback", "Payment failed: " + errorMessage);
             }
         }
-
-
-
-
 
         @Override
         public void onError(@NonNull Exception e) {

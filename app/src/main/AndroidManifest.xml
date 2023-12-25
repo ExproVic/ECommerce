@@ -37,9 +37,6 @@
             android:name=".AddNewProductsActivity"
             android:exported="false" />
         <activity
-            android:name=".Category.CategoryActivity"
-            android:exported="false" />
-        <activity
             android:name=".AdminPanelActivity"
             android:exported="false" />
         <activity

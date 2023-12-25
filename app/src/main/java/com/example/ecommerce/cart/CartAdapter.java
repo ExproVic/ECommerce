@@ -46,21 +46,17 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         ItemCart currentItem = cartItems.get(position);
         ItemCart cartItem = cartItems.get(position);
 
-        // Встановлюємо дані для кожного елемента корзини
         holder.nameProduct.setText(cartItem.getItemName());
         holder.countProduct.setText(String.valueOf(cartItem.getItemCount()));
         holder.totalPrice.setText(String.valueOf(cartItem.getTotalPrice()));
 
-        // Завантаження зображення
         Glide.with(context).load(cartItem.getImageUrl()).into(holder.imgProduct);
 
         holder.deleteProductButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Отримайте позицію елемента, який слід видалити
                 int adapterPosition = holder.getAdapterPosition();
 
-                // Викликайте інтерфейс, щоб сповістити зовнішній світ про натискання кнопки видалення
                 if (onRemoveClickListener != null) {
                     onRemoveClickListener.onRemoveClick(adapterPosition);
                 }
@@ -76,15 +72,15 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     static class CartViewHolder extends RecyclerView.ViewHolder {
 
         TextView nameProduct, countProduct, totalPrice;
-        ImageView imgProduct, deleteProductButton; // Додайте ImageView
+        ImageView imgProduct, deleteProductButton;
 
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
             nameProduct = itemView.findViewById(R.id.nameProduct);
             countProduct = itemView.findViewById(R.id.countProduct);
             totalPrice = itemView.findViewById(R.id.totalprice);
-            imgProduct = itemView.findViewById(R.id.imgProduct); // Ініціалізуйте ImageView
-            deleteProductButton = itemView.findViewById(R.id.deleteproductfromcart); // Ініціалізуйте ImageView
+            imgProduct = itemView.findViewById(R.id.imgProduct);
+            deleteProductButton = itemView.findViewById(R.id.deleteproductfromcart);
         }
     }
 }
