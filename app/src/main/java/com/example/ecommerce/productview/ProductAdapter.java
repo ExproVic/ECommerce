@@ -44,7 +44,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ViewProductHolder> {
                 FirebaseUser currentUser = mAuth.getCurrentUser();
                 if (currentUser != null) {
                     String uid = currentUser.getUid();
-                    String productID = item.getPname();
                     DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("cart").child(uid);
                     cartRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -88,7 +87,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ViewProductHolder> {
         holder.setItems(items);
         return holder;
     }
-
+    public void updateList(List<ItemProduct> updatedList) {
+        items = updatedList;
+        notifyDataSetChanged();
+    }
     @Override
     public void onBindViewHolder(@NonNull ViewProductHolder holder, int position) {
         ItemProduct item = items.get(position);

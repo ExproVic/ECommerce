@@ -10,9 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:background="@color/textHeading"
-
         android:orientation="horizontal">
-
         <RadioButton
             android:id="@+id/radioHighprice"
             android:layout_width="wrap_content"
@@ -44,11 +42,16 @@
             android:layout_height="wrap_content"
             android:theme="@style/MyRadioButton"
             android:text="Sign Z-A"/>
+
     </RadioGroup>
 
 
+
+
+
+
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="60dp"
         android:layout_marginBottom="35dp"
         android:id="@+id/recycleviewProduct"
         android:layout_width="match_parent"
@@ -65,6 +68,47 @@
         android:onClick="onCartButtonClick"
         android:src="@drawable/shopping_cart" />
 
+    <TextView
+        android:id="@+id/PriceFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:textAlignment="center"
+        android:layout_below="@+id/radioGroup"
+        android:layout_marginTop="0dp"
+        android:text="Price Filter:" />
 
+    <EditText
+        android:id="@+id/fieldfrom"
+        android:layout_width="60dp"
+        android:layout_height="35dp"
+        android:layout_below="@id/radioGroup"
+        android:layout_marginStart="20dp"
+        android:layout_toEndOf="@+id/PriceFilter"
+        android:ems="10"
+        android:hint="From"
+        android:inputType="number"
+        android:textSize="13sp" />
 
+    <EditText
+        android:id="@+id/fieldto"
+        android:layout_width="60dp"
+        android:layout_height="35dp"
+        android:layout_below="@id/radioGroup"
+        android:layout_marginStart="40dp"
+        android:layout_toEndOf="@+id/fieldfrom"
+        android:ems="10"
+        android:hint="To"
+        android:inputType="number"
+        android:textSize="13sp" />
+
+    <Button
+        android:id="@+id/buttonFilter"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:layout_below="@id/radioGroup"
+        android:layout_marginStart="46dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/fieldto"
+        android:backgroundTint="@color/textHeading"
+        android:text="Use" />
 </RelativeLayout>

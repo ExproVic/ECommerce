@@ -2,9 +2,12 @@ package com.example.ecommerce.productview;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,6 +45,37 @@ public class ShowProductActivity extends AppCompatActivity {
         adapter = new ProductAdapter(getApplicationContext(), items);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
+        Button buttonFilter = findViewById(R.id.buttonFilter);
+        buttonFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText fieldFrom = findViewById(R.id.fieldfrom);
+                EditText fieldTo = findViewById(R.id.fieldto);
+
+                String fromText = fieldFrom.getText().toString();
+                String toText = fieldTo.getText().toString();
+                if (!TextUtils.isEmpty(fromText) || !TextUtils.isEmpty(toText)) {
+                    double fromPrice, toPrice;
+
+                    if (!TextUtils.isEmpty(fromText)) {
+                        fromPrice = Double.parseDouble(fromText);
+                    } else {
+                        fromPrice = 0;
+                    }
+
+                    if (!TextUtils.isEmpty(toText)) {
+                        toPrice = Double.parseDouble(toText);
+                    } else {
+                        toPrice = 9999;
+                    }
+
+                    displayFilteredProducts(fromPrice, toPrice);
+                } else {
+                    Toast.makeText(ShowProductActivity.this, "Enter valid price range", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
 
         String categoryName = getIntent().getStringExtra("category");
@@ -88,6 +122,19 @@ public class ShowProductActivity extends AppCompatActivity {
             Log.e(TAG, "Category name not provided in the intent");
         }
     }
+    private void displayFilteredProducts(double fromPrice, double toPrice) {
+        List<ItemProduct> filteredProducts = new ArrayList<>();
+
+        for (ItemProduct product : items) {
+            double productPrice = Double.parseDouble(product.getPrice());
+            if (productPrice >= fromPrice && productPrice <= toPrice) {
+                filteredProducts.add(product);
+            }
+        }
+        adapter.updateList(filteredProducts);
+    }
+
+
     private void onAddToCartButtonClick() {
         if (!items.isEmpty()) {
             ItemProduct selectedProduct = items.get(0);
