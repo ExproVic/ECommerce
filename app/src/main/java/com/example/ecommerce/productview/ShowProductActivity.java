@@ -16,8 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce.R;
 import com.example.ecommerce.cart.ShowCartActivity;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 
 public class ShowProductActivity extends AppCompatActivity {
 
@@ -76,8 +75,6 @@ public class ShowProductActivity extends AppCompatActivity {
                 }
             }
         });
-
-
         String categoryName = getIntent().getStringExtra("category");
 
         if (categoryName != null) {
@@ -133,25 +130,6 @@ public class ShowProductActivity extends AppCompatActivity {
         }
         adapter.updateList(filteredProducts);
     }
-
-
-    private void onAddToCartButtonClick() {
-        if (!items.isEmpty()) {
-            ItemProduct selectedProduct = items.get(0);
-            addToCart(selectedProduct);
-        }
-    }
-    private void addToCart(ItemProduct product) {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null) {
-            String uid = currentUser.getUid();
-            DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("cart").child(uid);
-            cartRef.child(product.getPname()).setValue(product);
-            countProduct = 0;
-            Log.d(TAG, "Product added to cart successfully.");
-        }
-    }
-
 
     private void loadAndDisplayProducts(String categoryName) {
         DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference("categories")

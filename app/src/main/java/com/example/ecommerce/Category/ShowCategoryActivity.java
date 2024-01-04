@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+//Designed by Viktor Parakhonych all icons were taken from Flaticon
 
 public class ShowCategoryActivity extends AppCompatActivity implements CategoryClickListener {
 

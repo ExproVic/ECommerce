@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -62,6 +63,7 @@ public class GoPayActivity extends AppCompatActivity {
     private OkHttpClient httpClient = new OkHttpClient();
     private String paymentIntentClientSecret;
     private Stripe stripe;
+    private EditText deliveryAddressEditText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,9 +80,37 @@ public class GoPayActivity extends AppCompatActivity {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+        deliveryAddressEditText = findViewById(R.id.deliveryAddress);
+        Button saveAddressButton = findViewById(R.id.saveAddressButton);
+        saveAddressButton.setOnClickListener(view -> saveDeliveryAddress());
 
         startCheckout();
     }
+    private void saveDeliveryAddress() {
+        String deliveryAddress = deliveryAddressEditText.getText().toString().trim();
+        if (!deliveryAddress.isEmpty()) {
+             saveAddressToFirebase(deliveryAddress);
+            Toast.makeText(this, "Address saved: " + deliveryAddress, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Please enter a delivery address", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void saveAddressToFirebase(String address) {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DatabaseReference addressReference = FirebaseDatabase.getInstance().getReference("addresses").child(userId);
+            addressReference.setValue(address)
+                    .addOnSuccessListener(aVoid ->
+                            Toast.makeText(GoPayActivity.this, "Address saved successfully", Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(e ->
+                            Toast.makeText(GoPayActivity.this, "Failed to save address", Toast.LENGTH_SHORT).show());
+        } else {
+            Toast.makeText(GoPayActivity.this, "User not authenticated", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
     private void displayNotification(@NonNull String title, @Nullable String message) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channel_id")
                 .setContentTitle(title)
@@ -114,6 +144,7 @@ public class GoPayActivity extends AppCompatActivity {
         Map<String,Object> itemMap=new HashMap<>();
         List<Map<String,Object>> itemList =new ArrayList<>();
         payMap.put("currency","usd");
+        payMap.put("deliveryAddress", deliveryAddressEditText.getText().toString().trim());
         itemMap.put("id","photo_subscription");
         itemMap.put("amount",amount);
         itemList.add(itemMap);
