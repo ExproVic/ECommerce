@@ -16,18 +16,29 @@ public class ItemProduct implements Comparable<ItemProduct> {
 
     @PropertyName("imageProduct")
     private String imageProduct;
+    @PropertyName("buttonSize")
+    private String buttonSize;
 
     public ItemProduct() {
     }
 
-    public ItemProduct(String nameProduct, String descriptionProduct, String Price, String imageProduct) {
+    public ItemProduct(String nameProduct, String descriptionProduct, String Price, String imageProduct,String buttonSize) {
         this.pname = nameProduct;
         this.descriptionProduct = descriptionProduct;
         this.Price = Price;
         this.imageProduct = imageProduct;
+        this.buttonSize = buttonSize;
     }
     public int getCount() {
         return count;
+    }
+
+    public String getButtonSize() {
+        return buttonSize;
+    }
+
+    public void setButtonSize(String buttonSize) {
+        this.buttonSize = buttonSize;
     }
 
     public void setCount(int count) {

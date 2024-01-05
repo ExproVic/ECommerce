@@ -2,6 +2,7 @@ package com.example.ecommerce.productview;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -97,7 +98,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ViewProductHolder> {
         holder.nameProductView.setText(item.getPname());
         holder.descriptionProductView.setText(item.getDescription());
         holder.priceProductView.setText(item.getPrice()+"$");
-
+        if ("Yes".equals(item.getButtonSize())) {
+            holder.layoutSize.setVisibility(View.VISIBLE);
+        } else {
+            holder.layoutSize.setVisibility(View.GONE);
+        }
         Glide.with(context).load(item.getImage()).into(holder.imageProductView);
     }
 

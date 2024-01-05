@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -69,7 +71,6 @@ public class AddNewCategoryActivity extends AppCompatActivity {
                         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
                                 Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                                 while (!urlTask.isSuccessful()) ;
                                 Uri downloadUrl = urlTask.getResult();
@@ -77,6 +78,13 @@ public class AddNewCategoryActivity extends AppCompatActivity {
                                 Map<String, Object> categoryData = new HashMap<>();
                                 categoryData.put("name", categoryName);
                                 categoryData.put("imageUrl", downloadUrl.toString());
+
+                                // Додаємо інформацію про обрану радіо-кнопку
+                                RadioGroup radioGroup = findViewById(R.id.radiogrourpSize);
+                                int selectedRadioButtonId = radioGroup.getCheckedRadioButtonId();
+                                RadioButton selectedRadioButton = findViewById(selectedRadioButtonId);
+                                String buttonSize = selectedRadioButton.getText().toString();
+                                categoryData.put("buttonSize", buttonSize);
 
                                 categoriesRef.child(categoryName).setValue(categoryData);
 
@@ -97,6 +105,7 @@ public class AddNewCategoryActivity extends AppCompatActivity {
                 }
             }
         });
+
 
 
 

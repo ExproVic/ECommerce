@@ -44,4 +44,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Category_name" />
 
+    <RadioGroup
+        android:id="@+id/radiogrourpSize"
+        android:layout_width="411dp"
+        android:layout_height="76dp"
+        android:layout_marginTop="28dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addNewCategory">
+
+        <TextView
+            android:id="@+id/areacategoty"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:text="Add area size to category:" />
+
+        <RadioButton
+            android:id="@+id/yessize"
+            android:layout_width="match_parent"
+            android:layout_height="20sp"
+            android:text="Yes" />
+
+        <RadioButton
+            android:id="@+id/nosize"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:text="No" />
+    </RadioGroup>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

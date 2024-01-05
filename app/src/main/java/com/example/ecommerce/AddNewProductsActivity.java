@@ -149,30 +149,46 @@ public class AddNewProductsActivity extends AppCompatActivity {
 
         DatabaseReference productRef = categoryRef.child("Products").child(productName);
 
-        Map<String, Object> productData = new HashMap<>();
-        productData.put("productID",productRandomKey );
-        productData.put("description", description);
-        productData.put("image", imageUrl);
-        productData.put("price", price);
-        productData.put("pname", productName);
+        categoryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String buttonSize = dataSnapshot.child("buttonSize").getValue(String.class);
 
-        productRef.setValue(productData)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            loadingBar.dismiss();
-                            Toast.makeText(AddNewProductsActivity.this, "Product added", Toast.LENGTH_SHORT).show();
-                            Intent loginIntent = new Intent(AddNewProductsActivity.this, AdminPanelActivity.class);
-                            startActivity(loginIntent);
-                        } else {
-                            String message = task.getException().toString();
-                            Toast.makeText(AddNewProductsActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
-                            loadingBar.dismiss();
-                        }
-                    }
-                });
+                Map<String, Object> productData = new HashMap<>();
+                productData.put("productID", productRandomKey);
+                productData.put("description", description);
+                productData.put("image", imageUrl);
+                productData.put("price", price);
+                productData.put("pname", productName);
+
+                if ("Yes".equals(buttonSize)) {
+                    productData.put("buttonSize", buttonSize);
+                }
+
+                productRef.setValue(productData)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    loadingBar.dismiss();
+                                    Toast.makeText(AddNewProductsActivity.this, "Product added", Toast.LENGTH_SHORT).show();
+                                    Intent loginIntent = new Intent(AddNewProductsActivity.this, AdminPanelActivity.class);
+                                    startActivity(loginIntent);
+                                } else {
+                                    String message = task.getException().toString();
+                                    Toast.makeText(AddNewProductsActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
+                                    loadingBar.dismiss();
+                                }
+                            }
+                        });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
+
 
     private void openGallery() {
         Intent galleryIntent = new Intent();
