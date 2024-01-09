@@ -63,4 +63,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password" />
 
+    <Button
+        android:id="@+id/employeedelete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:backgroundTint="@color/red"
+        android:onClick="deleteEmployee"
+        android:text="delete an employee"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerDeleteemployee"
+        app:layout_constraintWidth_percent="0.4" />
+
+    <Spinner
+        android:id="@+id/spinnerDeleteemployee"
+        android:background="@color/white"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="164dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/employeeRegistration" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
