@@ -68,7 +68,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ViewProductHolder> {
                                 productRef.child("Pname").setValue(item.getPname());
                                 productRef.child("price").setValue(Double.parseDouble(item.getPrice()));
                                 productRef.child("count").setValue(count);
-                                productRef.child("totalAmount").setValue(count * Double.parseDouble(item.getPrice()));
+//                                productRef.child("totalAmount").setValue(count * Double.parseDouble(item.getPrice()));
 
                                 Toast.makeText(context, "The product has been added to the cart", Toast.LENGTH_SHORT).show();
                             } else {

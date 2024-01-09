@@ -82,7 +82,7 @@
         android:layout_width="60dp"
         android:layout_height="35dp"
         android:layout_below="@id/radioGroup"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
         android:layout_toEndOf="@+id/PriceFilter"
         android:ems="10"
         android:hint="From"
@@ -94,7 +94,7 @@
         android:layout_width="60dp"
         android:layout_height="35dp"
         android:layout_below="@id/radioGroup"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="15dp"
         android:layout_toEndOf="@+id/fieldfrom"
         android:ems="10"
         android:hint="To"
@@ -103,12 +103,22 @@
 
     <Button
         android:id="@+id/buttonFilter"
-        android:layout_width="100dp"
+        android:layout_width="75dp"
         android:layout_height="35dp"
         android:layout_below="@id/radioGroup"
-        android:layout_marginStart="46dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/fieldto"
         android:backgroundTint="@color/textHeading"
         android:text="Use" />
+    <Button
+        android:id="@+id/buttonReset"
+        android:layout_width="85dp"
+        android:layout_height="35dp"
+        android:layout_below="@id/radioGroup"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/buttonFilter"
+        android:backgroundTint="@color/textHeading"
+        android:text="Reset" />
 </RelativeLayout>

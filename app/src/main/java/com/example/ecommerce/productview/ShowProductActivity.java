@@ -34,6 +34,10 @@ public class ShowProductActivity extends AppCompatActivity {
     private List<ItemProduct> items;
     private ProductAdapter adapter;
     private int countProduct = 0;
+    private String categoryName;
+    private int changef_s=0;
+    private List<ItemProduct> filteredAndSortedProducts;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +48,19 @@ public class ShowProductActivity extends AppCompatActivity {
         adapter = new ProductAdapter(getApplicationContext(), items);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+        Button buttonReset = findViewById(R.id.buttonReset);
+        categoryName = getIntent().getStringExtra("category");
+        buttonReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    double fromPrice, toPrice;
+                        fromPrice = 0;
+                        toPrice = 19999;
+                        changef_s=1;
+                    displayFilteredProducts(fromPrice, toPrice);
+                }
+        });
+
 
         Button buttonFilter = findViewById(R.id.buttonFilter);
         buttonFilter.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +68,7 @@ public class ShowProductActivity extends AppCompatActivity {
             public void onClick(View v) {
                 EditText fieldFrom = findViewById(R.id.fieldfrom);
                 EditText fieldTo = findViewById(R.id.fieldto);
-
+                changef_s=1;
                 String fromText = fieldFrom.getText().toString();
                 String toText = fieldTo.getText().toString();
                 if (!TextUtils.isEmpty(fromText) || !TextUtils.isEmpty(toText)) {
@@ -120,16 +137,17 @@ public class ShowProductActivity extends AppCompatActivity {
         }
     }
     private void displayFilteredProducts(double fromPrice, double toPrice) {
-        List<ItemProduct> filteredProducts = new ArrayList<>();
+        filteredAndSortedProducts = new ArrayList<>();
 
         for (ItemProduct product : items) {
             double productPrice = Double.parseDouble(product.getPrice());
             if (productPrice >= fromPrice && productPrice <= toPrice) {
-                filteredProducts.add(product);
+                filteredAndSortedProducts.add(product);
             }
         }
-        adapter.updateList(filteredProducts);
+        adapter.updateList(filteredAndSortedProducts);
     }
+
 
     private void loadAndDisplayProducts(String categoryName) {
         DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference("categories")
@@ -161,22 +179,39 @@ public class ShowProductActivity extends AppCompatActivity {
     }
 
     private void sortByHighPrice(String categoryName) {
-        Collections.sort(items, new ProductComparators.HighPriceComparator());
+        if (changef_s == 0) {
+            Collections.sort(items, new ProductComparators.HighPriceComparator());
+        } else if (changef_s == 1) {
+            Collections.sort(filteredAndSortedProducts, new ProductComparators.HighPriceComparator());
+        }
         adapter.notifyDataSetChanged();
     }
 
     private void sortByLowPrice(String categoryName) {
-        Collections.sort(items, new ProductComparators.LowPriceComparator());
+        if (changef_s == 0) {
+            Collections.sort(items, new ProductComparators.LowPriceComparator());
+        } else if (changef_s == 1) {
+            Collections.sort(filteredAndSortedProducts, new ProductComparators.LowPriceComparator());
+        }
         adapter.notifyDataSetChanged();
     }
 
     private void sortBySignAZ(String categoryName) {
-        Collections.sort(items, new ProductComparators.SignAZComparator());
+        if (changef_s == 0) {
+            Collections.sort(items, new ProductComparators.SignAZComparator());
+        } else if (changef_s == 1) {
+            Collections.sort(filteredAndSortedProducts, new ProductComparators.SignAZComparator());
+        }
         adapter.notifyDataSetChanged();
     }
 
     private void sortBySignZA(String categoryName) {
-        Collections.sort(items, new ProductComparators.SignZAZComparator());
+        if (changef_s == 0) {
+            Collections.sort(items, new ProductComparators.SignZAZComparator());
+        } else if (changef_s == 1) {
+            Collections.sort(filteredAndSortedProducts, new ProductComparators.SignZAZComparator());
+        }
         adapter.notifyDataSetChanged();
     }
+
 }
