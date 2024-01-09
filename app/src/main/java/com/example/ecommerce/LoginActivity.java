@@ -15,6 +15,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
     EditText email,password;
@@ -51,24 +57,46 @@ public class LoginActivity extends AppCompatActivity {
             return;
 
         }
-        auth.signInWithEmailAndPassword(userEmail,userPassword).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+        auth.signInWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    if (userEmail.equals("admin@gmail.com") && userPassword.equals("admin123")) {
-                        Intent intent = new Intent(LoginActivity.this, AdminPanelActivity.class);
-                        startActivity(intent);
-                    } else {
-                        // login and password "admin@gmail.com"  "admin123"
-                        Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(LoginActivity.this, ShowCategoryActivity.class));
-                    }
-                }else {
-                    Toast.makeText(LoginActivity.this,"Error"+task.getException(),Toast.LENGTH_SHORT).show();
+                if (task.isSuccessful()) {
+                    FirebaseUser user = auth.getCurrentUser();
+                    if (user != null) {
+                        if ("admin@gmail.com".equals(user.getEmail()) && "admin123".equals(userPassword)) {
+                            // login - admin@gmail.com і password - admin123
+                            Intent intent = new Intent(LoginActivity.this, SuperAdminActivity.class);
+                            startActivity(intent);
+                        } else {
+                            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
+                            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        String userRole = snapshot.child("role").getValue(String.class);
+                                        if ("employee".equals(userRole)) {
+                                            Intent intent = new Intent(LoginActivity.this, AdminPanelActivity.class);
+                                            startActivity(intent);
+                                        } else {
+                                            Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(LoginActivity.this, ShowCategoryActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    }
 
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                    Toast.makeText(LoginActivity.this, "Error reading user role", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    Toast.makeText(LoginActivity.this, "Error" + task.getException(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
 
     }
 }

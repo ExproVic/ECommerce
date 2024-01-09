@@ -33,8 +33,7 @@ public class ShowProductActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private List<ItemProduct> items;
     private ProductAdapter adapter;
-    private int countProduct = 0;
-    private String categoryName;
+
     private int changef_s=0;
     private List<ItemProduct> filteredAndSortedProducts;
 
@@ -49,7 +48,6 @@ public class ShowProductActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         Button buttonReset = findViewById(R.id.buttonReset);
-        categoryName = getIntent().getStringExtra("category");
         buttonReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
