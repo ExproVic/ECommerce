@@ -1,5 +1,7 @@
 package com.example.ecommerce;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -10,7 +12,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -67,16 +68,15 @@ public class EmployeeManagementActivity extends AppCompatActivity {
                         employeeIds.add(employeeId);
                     }
                 }
-
                 if (employeeEmails.isEmpty()) {
-                    Toast.makeText(EmployeeManagementActivity.this, "No employees found", Toast.LENGTH_SHORT).show();
-                } else {
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(EmployeeManagementActivity.this, android.R.layout.simple_spinner_item, employeeEmails);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    employeeSpinner.setAdapter(adapter);
-
-                    employeeSpinner.setTag(employeeIds);
+                    employeeEmails.add("-");
+                    employeeIds.add("-");
                 }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(EmployeeManagementActivity.this, android.R.layout.simple_spinner_item, employeeEmails);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                employeeSpinner.setAdapter(adapter);
+                employeeSpinner.setTag(employeeIds);
             }
 
             @Override
@@ -85,41 +85,62 @@ public class EmployeeManagementActivity extends AppCompatActivity {
             }
         });
     }
+
     public void deleteEmployee(View view) {
         Spinner employeeSpinner = findViewById(R.id.spinnerDeleteemployee);
+
         int selectedPosition = employeeSpinner.getSelectedItemPosition();
         if (selectedPosition != AdapterView.INVALID_POSITION) {
             List<String> employeeIds = (List<String>) employeeSpinner.getTag();
 
             String selectedEmployeeId = employeeIds.get(selectedPosition);
-            usersRef.child(selectedEmployeeId).removeValue(new DatabaseReference.CompletionListener() {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Confirm Deletion");
+            builder.setMessage("Are you sure you want to delete this employee?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
-                public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                    if (error == null) {
-                        setupEmployeeSpinner();
-                        Toast.makeText(EmployeeManagementActivity.this, "Employee deleted successfully", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(EmployeeManagementActivity.this, "Failed to delete employee: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    // Видаляємо employee з Firebase Authentication
+                    FirebaseAuth.getInstance().signInWithEmailAndPassword("admin@gmail.com", "admin123") // Аутентифікація як адмін (замініть на свої дані)
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                                        if (firebaseUser != null) {
+                                            firebaseUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        // Оновлюємо спінер після видалення
+                                                        usersRef.child(selectedEmployeeId).removeValue(); // Видалення з бази даних Realtime
+                                                        setupEmployeeSpinner();
+                                                        Toast.makeText(EmployeeManagementActivity.this, "Employee deleted successfully", Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        Toast.makeText(EmployeeManagementActivity.this, "Failed to delete employee: " + task.getException(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    } else {
+                                        Toast.makeText(EmployeeManagementActivity.this, "Authentication failed: " + task.getException(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                 }
             });
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            if (user != null) {
-                user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            // Видалення з бази даних Realtime було вже оброблено вище
-                        } else {
-                            Toast.makeText(EmployeeManagementActivity.this, "Failed to delete user from Authentication: " + task.getException(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {}
+            });
+
+            builder.show();
         } else {
             Toast.makeText(this, "Please select an employee to delete", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     public void signup(View view) {
         String userName = name.getText().toString();
