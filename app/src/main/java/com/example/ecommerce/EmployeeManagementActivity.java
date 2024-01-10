@@ -113,7 +113,6 @@ public class EmployeeManagementActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
                                                     if (task.isSuccessful()) {
-                                                        // Оновлюємо спінер після видалення
                                                         usersRef.child(selectedEmployeeId).removeValue(); // Видалення з бази даних Realtime
                                                         setupEmployeeSpinner();
                                                         Toast.makeText(EmployeeManagementActivity.this, "Employee deleted successfully", Toast.LENGTH_SHORT).show();
