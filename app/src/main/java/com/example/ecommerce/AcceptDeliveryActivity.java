@@ -1,6 +1,8 @@
 package com.example.ecommerce;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -39,40 +41,32 @@ public class AcceptDeliveryActivity extends AppCompatActivity {
 
         setupSpinnerAcceptDelivery();
     }
+
     private void onCancelButtonClick() {
         String selectedUserId = spinnerCartConfirm.getSelectedItem().toString();
-
         String decision = "Cancel";
 
-        DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("Orders").child(selectedUserId);
+        DatabaseReference acceptDeliveryRef = FirebaseDatabase.getInstance().getReference("accept_delivery").child(selectedUserId);
+        Map<String, Object> updateData = new HashMap<>();
+        updateData.put("decision", decision);
 
-        Map<String, Object> orderData = new HashMap<>();
-        orderData.put("decision", decision);
-
-        ordersRef.setValue(orderData);
-
-        DatabaseReference acceptDeliveryRef = FirebaseDatabase.getInstance().getReference("accept_delivery");
-        acceptDeliveryRef.child(selectedUserId).removeValue();
+        acceptDeliveryRef.updateChildren(updateData);
         setupSpinnerAcceptDelivery();
-
     }
+
     private void onConfirmButtonClick() {
         String selectedUserId = spinnerCartConfirm.getSelectedItem().toString();
-
         String decision = "Confirm";
 
-        DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("Orders").child(selectedUserId);
+        DatabaseReference acceptDeliveryRef = FirebaseDatabase.getInstance().getReference("accept_delivery").child(selectedUserId);
+        Map<String, Object> updateData = new HashMap<>();
+        updateData.put("decision", decision);
 
-        Map<String, Object> orderData = new HashMap<>();
-        orderData.put("decision", decision);
-
-        ordersRef.setValue(orderData);
-
-        DatabaseReference acceptDeliveryRef = FirebaseDatabase.getInstance().getReference("accept_delivery");
-        acceptDeliveryRef.child(selectedUserId).removeValue();
+        acceptDeliveryRef.updateChildren(updateData);
         setupSpinnerAcceptDelivery();
-
     }
+
+
     private void setupSpinnerAcceptDelivery() {
         Query query = FirebaseDatabase.getInstance().getReference("accept_delivery");
 
@@ -82,8 +76,11 @@ public class AcceptDeliveryActivity extends AppCompatActivity {
                 List<String> deliveryIds = new ArrayList<>();
 
                 for (DataSnapshot deliverySnapshot : snapshot.getChildren()) {
-                    String deliveryId = deliverySnapshot.getKey();
-                    deliveryIds.add(deliveryId);
+                    // Перевірка наявності параметру "decision"
+                    if (!deliverySnapshot.hasChild("decision")) {
+                        String deliveryId = deliverySnapshot.getKey();
+                        deliveryIds.add(deliveryId);
+                    }
                 }
 
                 if (deliveryIds.isEmpty()) {
@@ -96,8 +93,24 @@ public class AcceptDeliveryActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                // Обробка помилок, якщо необхідно
+            }
+        });
+
+        spinnerCartConfirm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // Не виконуємо видалення вибраного елемента
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Обробка, якщо нічого не вибрано
             }
         });
     }
+
+
+
 
 }
