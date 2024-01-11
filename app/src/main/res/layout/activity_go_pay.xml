@@ -10,50 +10,49 @@
         android:id="@+id/cardInputWidget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
 
-        tools:layout_editor_absoluteX="20dp"
-        tools:layout_editor_absoluteY="44dp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deliveryAddress"
         tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/payButton"
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:onClick="startGoPay"
+        android:layout_marginTop="56dp"
         android:backgroundTint="@color/green"
+        android:onClick="startGoPay"
         android:text="Pay now"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardInputWidget"
-        app:layout_constraintVertical_bias="0.165" />
+        app:layout_constraintTop_toBottomOf="@+id/cardInputWidget" />
 
     <EditText
         android:id="@+id/deliveryAddress"
-        android:layout_width="280dp"
+        android:layout_width="270dp"
         android:layout_height="50dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/edit_text_field"
         android:hint="Delivery address"
         android:padding="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/payButton"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.8" />
 
     <Button
         android:id="@+id/saveAddressButton"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="40dp"
         android:backgroundTint="@color/textHeading"
         android:text="Save Address"
         app:layout_constraintStart_toEndOf="@+id/deliveryAddress"
-        app:layout_constraintTop_toBottomOf="@+id/payButton" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -160,10 +160,38 @@ public class ShowCartActivity extends AppCompatActivity {
         updateTotalAmount();
         String amount = String.valueOf(calculateTotalAmount());
 
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("accept_delivery").child(uid);
+
+        cartRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                userRef.setValue(dataSnapshot.getValue())
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    cartRef.removeValue();
+                                    Log.d("ShowCartActivity", "Data copied to accept_delivery successfully");
+                                    updateCartView();
+                                    updateTotalAmount();
+                                } else {
+                                    Log.e("ShowCartActivity", "Error copying data to accept_delivery: " + task.getException().getMessage());
+                                }
+                            }
+                        });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("ShowCartActivity", "Error reading data from cart: " + databaseError.getMessage());
+            }
+        });
+
         Intent intent = new Intent(this, GoPayActivity.class);
-        intent.putExtra("amount",amount);
+        intent.putExtra("amount", amount);
         startActivity(intent);
     }
+
     private int calculateTotalItemCount() {
         int totalItemCount = 0;
         for (ItemCart cartItem : cartItems) {

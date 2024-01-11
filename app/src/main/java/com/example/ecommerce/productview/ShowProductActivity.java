@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce.R;
 import com.example.ecommerce.cart.ShowCartActivity;
+import com.example.ecommerce.emailUserActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -133,6 +134,10 @@ public class ShowProductActivity extends AppCompatActivity {
         } else {
             Log.e(TAG, "Category name not provided in the intent");
         }
+    }
+    public void onEmailButtonClick(View view) {
+        Intent intent = new Intent(this, emailUserActivity.class);
+        startActivity(intent);
     }
     private void displayFilteredProducts(double fromPrice, double toPrice) {
         filteredAndSortedProducts = new ArrayList<>();

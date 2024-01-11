@@ -33,19 +33,33 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleview"
         android:layout_marginTop="40dp"
+        android:layout_marginBottom="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
     <ImageView
         android:id="@+id/imgcart"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/recycleview"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="509dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="-50dp"
+        android:layout_marginEnd="68dp"
         android:clickable="true"
         android:onClick="onCartButtonClick"
         android:src="@drawable/shopping_cart" />
+
+    <ImageView
+        android:id="@+id/imgemail"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_below="@+id/recycleview"
+        android:layout_marginTop="-50dp"
+        android:layout_marginEnd="142dp"
+        android:layout_toStartOf="@+id/imgcart"
+        android:clickable="true"
+        android:onClick="onEmailButtonClick"
+        android:src="@drawable/mail" />
 
 
 </RelativeLayout>

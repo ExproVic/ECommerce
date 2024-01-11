@@ -16,6 +16,7 @@ import com.example.ecommerce.R;
 import com.example.ecommerce.cart.ShowCartActivity;
 import com.example.ecommerce.categoryview.ItemCategory;
 import com.example.ecommerce.categoryview.MyAdapter;
+import com.example.ecommerce.emailUserActivity;
 import com.example.ecommerce.productview.ShowProductActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -136,6 +137,10 @@ public class ShowCategoryActivity extends AppCompatActivity implements CategoryC
     }
     public void onCartButtonClick(View view) {
         Intent intent = new Intent(this, ShowCartActivity.class);
+        startActivity(intent);
+    }
+    public void onEmailButtonClick(View view) {
+        Intent intent = new Intent(this, emailUserActivity.class);
         startActivity(intent);
     }
     private void openCategory(ItemCategory itemCategory) {

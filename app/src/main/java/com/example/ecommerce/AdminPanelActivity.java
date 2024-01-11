@@ -17,6 +17,9 @@ public class AdminPanelActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_panel);
     }
+    public void acceptDelivery(View view) {
+        startActivity(new Intent(AdminPanelActivity.this, AcceptDeliveryActivity.class));
+    }
 
     public void addProducts(View view) {
         startActivity(new Intent(AdminPanelActivity.this, AddNewProductsActivity.class));
