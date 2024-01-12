@@ -16,7 +16,7 @@ import com.example.ecommerce.R;
 import com.example.ecommerce.cart.ShowCartActivity;
 import com.example.ecommerce.categoryview.ItemCategory;
 import com.example.ecommerce.categoryview.MyAdapter;
-import com.example.ecommerce.emailUserActivity;
+import com.example.ecommerce.emailfeedback.emailUserActivity;
 import com.example.ecommerce.productview.ShowProductActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

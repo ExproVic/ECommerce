@@ -76,7 +76,6 @@ public class AcceptDeliveryActivity extends AppCompatActivity {
                 List<String> deliveryIds = new ArrayList<>();
 
                 for (DataSnapshot deliverySnapshot : snapshot.getChildren()) {
-                    // Перевірка наявності параметру "decision"
                     if (!deliverySnapshot.hasChild("decision")) {
                         String deliveryId = deliverySnapshot.getKey();
                         deliveryIds.add(deliveryId);
@@ -93,19 +92,16 @@ public class AcceptDeliveryActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Обробка помилок, якщо необхідно
             }
         });
 
         spinnerCartConfirm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                // Не виконуємо видалення вибраного елемента
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // Обробка, якщо нічого не вибрано
             }
         });
     }

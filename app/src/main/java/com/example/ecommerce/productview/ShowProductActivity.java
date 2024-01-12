@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce.R;
 import com.example.ecommerce.cart.ShowCartActivity;
-import com.example.ecommerce.emailUserActivity;
+import com.example.ecommerce.emailfeedback.emailUserActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
