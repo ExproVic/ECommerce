@@ -2,22 +2,28 @@ package com.example.ecommerce.Category;
 
 public class Category {
     private String name;
-    private int imageId;
+    private String imageUrl;
+    private String buttonSize;
 
-    public Category(String categoryName, String imageUrl) {
+    public Category() {
+        // Пустий конструктор для Firebase
     }
 
-    public Category(String name, int imageId) {
+    public Category(String name, String imageUrl, String buttonSize) {
         this.name = name;
-        this.imageId = imageId;
+        this.imageUrl = imageUrl;
+        this.buttonSize = buttonSize;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getImageId() {
-        return imageId;
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public String getButtonSize() {
+        return buttonSize;
     }
 }
-

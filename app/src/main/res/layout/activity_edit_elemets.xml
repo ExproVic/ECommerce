@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditElemetsActivity">
+
+    <Spinner
+        android:id="@+id/spinnerCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <EditText
+        android:id="@+id/changeCategory"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:background="@drawable/edit_text_field"
+        android:layout_marginTop="5dp"
+        android:hint="Name Category to change"
+        android:padding="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerCategory"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <Spinner
+        android:id="@+id/spinnerProducts"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editbuttonCategory" />
+    <EditText
+        android:id="@+id/changeProductName"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:background="@drawable/edit_text_field"
+        android:layout_marginTop="5dp"
+        android:hint="Name Product to change"
+        android:padding="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerProducts"
+        app:layout_constraintWidth_percent="0.8" />
+    <EditText
+        android:id="@+id/changeProductDescription"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:background="@drawable/edit_text_field"
+        android:layout_marginTop="5dp"
+        android:hint="Descriptiony to change"
+        android:padding="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changeProductName"
+        app:layout_constraintWidth_percent="0.8" />
+    <EditText
+        android:id="@+id/changeProductPrice"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:background="@drawable/edit_text_field"
+        android:layout_marginTop="5dp"
+        android:hint="Price product to change"
+        android:padding="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changeProductDescription"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <Button
+        android:id="@+id/editbuttonCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="136dp"
+        android:layout_marginTop="96dp"
+        android:backgroundTint="@color/purle"
+        android:onClick="EditCategory"
+        android:text="Edit Category"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerCategory" />
+
+    <Button
+        android:id="@+id/buttonEditProducts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
+        android:backgroundTint="@color/green"
+        android:onClick="EditProduct"
+        android:text="EditProduct"
+        app:layout_constraintEnd_toEndOf="@+id/editbuttonCategory"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/editbuttonCategory"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerProducts" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,6 +20,12 @@ public class SuperAdminActivity extends AppCompatActivity {
     public void employeeManagement(View view) {
         startActivity(new Intent(SuperAdminActivity.this, EmployeeManagementActivity.class));
     }
+    public void Statistics(View view) {
+        startActivity(new Intent(SuperAdminActivity.this, StatisticsActivity.class));
+    }
+    public void editElements(View view){
+        startActivity(new Intent(SuperAdminActivity.this, EditElemetsActivity.class));
+    }
     public void addProducts(View view) {
         startActivity(new Intent(SuperAdminActivity.this, AddNewProductsActivity.class));
     }

@@ -24,6 +24,12 @@ public class AdminPanelActivity extends AppCompatActivity {
     public void addProducts(View view) {
         startActivity(new Intent(AdminPanelActivity.this, AddNewProductsActivity.class));
     }
+    public void editElements(View view){
+        startActivity(new Intent(AdminPanelActivity.this, EditElemetsActivity.class));
+    }
+    public void Statistics(View view) {
+        startActivity(new Intent(AdminPanelActivity.this, StatisticsActivity.class));
+    }
 
     public void showCategory(View view) {
         startActivity(new Intent(AdminPanelActivity.this, ShowCategoryActivity.class));
